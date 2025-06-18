@@ -1,93 +1,101 @@
-# ===========================================================
+# ===========================================================================
 # THÔNG TIN BOT
-# Đừng để bất cứ thứ gì không nhập!
-# ===========================================================
-Token: "BOT_TOKEN" # Bot Token lấy từ Discord Developer Portal
-BotName: "ZenKho Tickets"
-GuildID: "GUILD_ID" # ID của server Discord của bạn
-EmbedColors: "#5e99ff" # Mã màu Hex!
-LogCommands: false # Nếu bật sẽ log toàn bộ lệnh chạy qua terminal
-Statistics: false # Hiển thị số liệu thống kê trong terminal khi bot khởi động? (Điều này không ảnh hưởng đến lệnh số liệu thống kê hoặc bất kỳ lệnh nào khác)
-MongoURL: "CONNECTION_URL"
-DebugMode: false
+# Không được để trống bất kỳ mục nào bên dưới!
+# ===========================================================================
+Token: "" # Token của bot - nếu bạn chưa biết cách lấy, xem hướng dẫn tại: https://docs.plexdevelopment.net
+BotName: "ZenKho Ticket" # Tên hiển thị của bot trên Discord
+GuildID: " " # ID của server Discord bạn muốn bot hoạt động - chuột phải vào icon server > Sao chép ID
+EmbedColors: "#5e99ff" # Màu viền của các embed (dạng mã màu HEX)
+LogCommands: true # Bật/tắt ghi log các lệnh được sử dụng vào terminal (true = bật, false = tắt)
+Statistics: true # Khi bật sẽ hiển thị thống kê trong terminal khi bot khởi động (không ảnh hưởng đến lệnh /stats hay bất kỳ chức năng nào khác)
+MongoURI: "mongodb://localhost:27017/ticketbot" # Đường dẫn kết nối MongoDB (dùng để lưu dữ liệu ticket)
+DebugMode: false # Bật chế độ gỡ lỗi - hiện thêm thông tin trong terminal để kiểm tra lỗi
 
-# ==========================================================
+# ===========================================================================
 # TRẠNG THÁI HOẠT ĐỘNG CỦA BOT
-# ==========================================================
+# ===========================================================================
 BotActivitySettings:
-  Enabled: true
-  ActivityType: "WATCHING" # WATCHING, PLAYING, COMPETING
-  Status: "ONLINE" # ONLINE, IDLE, DND, INVISIBLE
-  Interval: 30 # Thời gian mà trạng thái sẽ thay đổi
-  Statuses: # Những trạng thái hoạt động: {total-tickets}, {open-tickets}, {total-messages}, {total-users}, {total-channels}, {averge-completion}, ⭐{average-rating}/5.0, {average-response}
-    - "{total-tickets} tickets"
-    - "{total-users} users"
-    - "{total-messages} messages"
+  Enabled: true # Bật/tắt trạng thái hoạt động (true = bật, false = tắt)
+  ActivityType: "WATCHING" # Kiểu hoạt động hiển thị: WATCHING (Đang xem), PLAYING (Đang chơi), COMPETING (Đang thi đấu)
+  Status: "ONLINE" # Trạng thái bot: ONLINE (Trực tuyến), IDLE (Rảnh), DND (Không làm phiền), INVISIBLE (Ẩn)
+  Interval: 30 # Thời gian (giây) giữa mỗi lần thay đổi trạng thái
+  Statuses: # Các trạng thái sẽ được hiển thị luân phiên – bạn có thể dùng biến động: 
+    # {total-tickets} - tổng số ticket
+    # {open-tickets} - số ticket đang mở
+    # {total-messages} - tổng số tin nhắn trong ticket
+    # {total-users} - tổng số người dùng đã tạo ticket
+    # {total-channels} - tổng số kênh đã tạo
+    # {average-completion} - % ticket đã hoàn tất
+    # ⭐{average-rating}/5.0 - đánh giá trung bình (sao)
+    # {average-response} - thời gian phản hồi trung bình
+    - "{total-tickets} yêu cầu hỗ trợ"
+    - "{total-users} người dùng"
+    - "{total-messages} tin nhắn"
 
-# =========================================================
-# CÀI ĐẶT TICKET
-# =========================================================
-# # Bạn có thể sử dụng những thứ sau để hiện thời gian hoạt động của mình (Mô tả)
-# {workingHours-startTime-Monday} {workingHours-endTime-Monday}
-# {workingHours-startTime-Tuesday} {workingHours-endTime-Tuesday}
-# {workingHours-startTime-Wednesday} {workingHours-endTime-Wednesday}
-# {workingHours-startTime--Thursday} {workingHours-endTime-Thursday}
-# {workingHours-startTime--Friday} {workingHours-endTime-Friday}
-# {workingHours-startTime--Saturday} {workingHours-endTime-Saturday}
-# {workingHours-startTime--Sunday} {workingHours-endTime-Sunday}
+# ===========================================================================
+# CẤU HÌNH TICKET (YÊU CẦU HỖ TRỢ)
+# ===========================================================================
+# Bạn có thể sử dụng các placeholder sau để hiển thị **giờ làm việc** trong phần mô tả của bảng điều khiển (Panel Embed - Description):
+# {workingHours-startTime-Monday} {workingHours-endTime-Monday}       -> Thứ Hai
+# {workingHours-startTime-Tuesday} {workingHours-endTime-Tuesday}     -> Thứ Ba
+# {workingHours-startTime-Wednesday} {workingHours-endTime-Wednesday} -> Thứ Tư
+# {workingHours-startTime-Thursday} {workingHours-endTime-Thursday}   -> Thứ Năm
+# {workingHours-startTime-Friday} {workingHours-endTime-Friday}       -> Thứ Sáu
+# {workingHours-startTime-Saturday} {workingHours-endTime-Saturday}   -> Thứ Bảy
+# {workingHours-startTime-Sunday} {workingHours-endTime-Sunday}       -> Chủ Nhật
 
-TicketPanelSettings: # Sử dụng lệnh /panel để gửi bảng điều khiển đến một kênh!
+TicketPanelSettings:  # Dùng lệnh /panel để gửi bảng hỗ trợ đến một kênh!
   Embed:
-    Title: "Support Tickets"
-    Description: "> Nếu bạn cần bất kỳ sự trợ giúp nào, hãy nhấp vào nút tương ứng với loại ticket bạn muốn mở"
-    Color: "#5e99ff"
-    PanelImage: "https://i.imgur.com/wOifwe6.png" # Kích cỡ khuyên dùng: 450x103, bạn có thể dùng mặc định này
-    CustomThumbnailURL: "https://cdn.discordapp.com/attachments/1378363930573017140/1380045187580956682/logo.png?ex=6847b8bc&is=6846673c&hm=cdf825e410319df46a58b712bf5a87817a6d868aecf76448d5542852c8bb0804&" # Sử dụng URL hình ảnh tùy chỉnh, để trống để vô hiệu hóa
+    Title: "Hỗ trợ Ticket"
+    Description: "> Nếu bạn cần hỗ trợ, hãy nhấn vào nút tương ứng với loại yêu cầu bạn muốn mở."
+    Color: "#5e99ff"  # Mã màu hex, để trống nếu muốn dùng màu mặc định của bot
+    PanelImage: "https://r2.fivemanage.com/3GPUwkN3lGi8o80lgmasb/bannertk.png" # Kích thước khuyến nghị: 450x103, có thể dùng ảnh mặc định hoặc để trống
+    CustomThumbnailURL: ""  # Dùng ảnh thu nhỏ tuỳ chỉnh, để trống để tắt
     Timestamp: false
     Footer:
       Enabled: true
-      CustomIconURL: "https://cdn.discordapp.com/attachments/1378363930573017140/1380045187580956682/logo.png?ex=6847b8bc&is=6846673c&hm=cdf825e410319df46a58b712bf5a87817a6d868aecf76448d5542852c8bb0804&" # Sử dụng URL hình ảnh tùy chỉnh, CHỈ HOẠT ĐỘNG NẾU TEXT KHÔNG TRỐNG! Để trống để vô hiệu hóa
-      text: "[ZenKho](https://zenkho.top)"
+      CustomIconURL: ""  # Dùng icon tùy chỉnh (chỉ hoạt động nếu phần văn bản không trống), để trống để tắt
+      text: ""           # Văn bản ở chân embed (có thể để trống)
 
 TicketSettings:
-  LogsChannelID: "CHANNEL_ID" # Kênh mặc định cho tất cả các logs
-  BlacklistedRoles: [""] # Những người với roles không được mở tickets, có thể add nhiều role
+  LogsChannelID: " " # Kênh mặc định để ghi log
+  BlacklistedRoles: [""] # Người dùng có các vai trò này sẽ không thể tạo ticket, có thể thêm nhiều
   MentionAuthor: false # Tag người tạo ticket trong ticket mới?
-  MaxTickets: 1 # Số lương ticket tối đa một người có thể mở trong một thời điểm
-  DeleteTime: 5 # Thời gian trước khi ticket bị xóa theo giây (sau khi nút đóng được bấm)
-  RestrictTicketClose: false # Chỉ những người có roles support mới được đóng ticket?
-  TicketCooldown: 0 # Thời gian nghỉ giữa những lần tạo ticket để tránh spam (giây, đặt là 0 để tắt)
-  SelectMenu: true # Sử dụng menu để tạo thay vì sử dụng nút? (Nên dùng khi có nhều hơn 3 mục)
-  DeleteCommandTranscript: true # Có nên lưu bản ghi khi sử dụng lệnh xóa không?
-  ChannelTopic: "Người tạo: {username} | Chủ đề: {category}" # Chủ để cho tất cả tickets, khả dụng: {username}, {category}
-  TicketCloseReason: false # Yêu cầu lý do để đóng ticket
+  MaxTickets: 1 # Số lượng ticket tối đa mà một người dùng có thể mở cùng lúc
+  DeleteTime: 5 # Số giây trước khi ticket bị xóa (sau khi nhấn nút đóng/xóa)
+  RestrictTicketClose: false # Chỉ cho phép người có vai trò hỗ trợ đóng ticket?
+  TicketCooldown: 30 # Thời gian chờ để tạo ticket mới nhằm tránh spam/lạm dụng (đơn vị: giây, đặt 0 để tắt)
+  SelectMenu: true # Dùng menu thả xuống để tạo ticket thay vì nút? (Sẽ có thể thêm 3 danh mục nữa)
+  DeleteCommandTranscript: true # Có lưu lại bản ghi khi dùng lệnh xóa ticket?
+  ChannelTopic: "Người tạo: {username} | Chủ đề: {category}" # Chủ đề của kênh ticket, các biến dùng được: {username}, {category}
+  TicketCloseReason: false # Yêu cầu lý do khi đóng ticket?
 
 TicketTranscriptSettings:
-  TranscriptType: "HTML" # Bạn có thể chọn giữa "HTML" và "TXT" (NÊN SỬ DỤNG HTML ĐỂ XEM Ở TRONG BẢNG ĐIỀU KHIỂN)
-  SaveInFolder: true # Lưu các bản ghi vào trong folder "transcripts"? (NÊN BẬT ĐỂ XEM BẢN GHI TỪ BẢNG ĐIỀU KHIỂN)
-  SaveImage: false # Tải và lưu toàn bộ hình ảnh trong bản ghi? (Chỉ hoạt động với HTML) Điều này sẽ tăng đáng kể dung lượng lưu trữ
-  MessagesRequirement: 1 # Số lượng tin nhắn tối thiểu phải có trong ticket để bản ghi được tạo và lưu
+  TranscriptType: "HTML" # Bạn có thể chọn giữa "HTML" và "TXT" (PHẢI ĐẶT LÀ HTML ĐỂ XEM LẠI BẢN GHI TRÊN DASHBOARD)
+  SaveInFolder: true # Lưu tất cả bản ghi ticket vào thư mục "transcripts"? (PHẢI BẬT ĐỂ XEM LẠI TRÊN DASHBOARD)
+  SaveImages: true # Tải xuống và lưu tất cả hình ảnh trong bản ghi? (Chỉ hoạt động với HTML) Lưu ý: sẽ làm tăng kích thước tệp
+  MessagesRequirement: 1 # Số lượng tin nhắn tối thiểu trong ticket để tạo và lưu bản ghi
 
 ClaimingSystem:
-  Enabled: false # Bật hệ thống nhận ticket?
-  UserPerms: # Quyền kênh cho tất cả người dùng khi vé được yêu cầu, ngoại trừ người dùng đã yêu cầu ticket và người tạo ticket
-    ViewChannel: true
-    SendMessages: false
+  Enabled: true # Bật hệ thống nhận hỗ trợ ticket?
+  UserPerms: # Quyền kênh dành cho tất cả người dùng khi ticket được nhận, trừ người đã nhận ticket và người tạo ticket
+    ViewChannel: true # Cho phép xem kênh
+    SendMessages: false # Không cho phép gửi tin nhắn
 
-TicketAlert: # Cấu hình này sẽ cấu hình hệ thống cảnh báo. Nếu lệnh cảnh báo được sử dụng trong một phiếu, bot sẽ gửi ping đến người tạo phiếu và thông báo cho họ rằng phiếu của họ sẽ bị đóng trong thời gian đã chỉ định trừ khi họ phản hồi.
-  Enabled: true
-  Time: "3h" # Thời gian trước khi đóng ticket, ví dụ: 7d, 3h, 5m
-  DMUser: false # Nhắn trực tiếp cho người tạo rằng ticket của họ sẽ bị đóng?
-  DMMessage: "## ⏳ Cảnh báo Ticket không hoạt động \n Ticket của bạn ở ``{server}`` đã không hoạt động trong ``{inactive-time}`` và sẽ tự động đóng sau **{time}** nếu không có tin nhắn. \n\n Nếu bạn nhắn tin trong ticket, chế độ tự động đóng sẽ được hủy bỏ."
-  Message: "## ⏳ Cảnh báo Ticket không hoạt động \n Ticket của bạn đã không hoạt động trong ``{inactive-ticket}`` và sẽ tự động đóng trong **{time}** nếu không hoạt động. \n\n Nếu bản trả lời cho ticket, chế độ tự động đóng sẽ được hủy bỏ. \n\n Bên cạnh đó, bạn có thể bấm nút bên dưới để đóng ticket ngay lập tức."
+TicketAlert: # Cấu hình hệ thống cảnh báo, nếu lệnh cảnh báo được dùng trong ticket, bot sẽ ping người tạo ticket và thông báo rằng ticket sẽ bị đóng sau thời gian chỉ định nếu không có phản hồi
+  Enabled: true # Bật cảnh báo không hoạt động?
+  Time: "12h" # Thời gian trước khi ticket bị đóng, ví dụ: 7d (7 ngày), 3h (3 giờ), 5m (5 phút)
+  DMUser: true # Gửi tin nhắn riêng cho người tạo rằng ticket sẽ bị đóng?
+  DMMessage: "## ⏳ Cảnh Báo Không Hoạt Động \n Ticket của bạn trong máy chủ ``{server}`` đã không hoạt động trong ``{inactive-time}`` và sẽ tự động bị đóng trong **{time}** nếu không có phản hồi. \n\n Nếu bạn phản hồi, việc đóng tự động sẽ bị hủy."
+  Message: "## ⏳ Cảnh Báo Không Hoạt Động \n Ticket này đã không hoạt động trong ``{inactive-time}`` và sẽ tự động bị đóng trong **{time}** nếu không có phản hồi. \n\n Nếu bạn phản hồi, việc đóng tự động sẽ bị hủy. \n\n Hoặc bạn có thể nhấn nút bên dưới để đóng ticket ngay lập tức."
   AutoAlert:
-    Emabled: false # Bật hoặc tắt tự động cảnh báo cho ticket không hoạt động. (Nếu ticket đang đợi admin phản hồi, nó sẽ không gửi)
-    InactiveTime: "1d" # Thời gian ticket không hoạt động (không ai nhắn tin) trước khi gửi cảnh báo
+    Enabled: true # Bật hoặc tắt tự động cảnh báo ticket không hoạt động (Nếu đang chờ phản hồi từ staff thì sẽ không gửi cảnh báo)
+    InactiveTime: "3d" # Thời gian ticket không hoạt động (không có phản hồi từ người dùng) trước khi gửi cảnh báo
 
-WorkingHours: # Cấu hình cho thời gian hoạt động
-  Enabled: false
-  Timezone: "Asia/Saigon" # Timezone của bạn, Sử dụng timezone từ link: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  Schedume: # 24 giờ format!
+WorkingHours: # Cấu hình giờ làm việc
+  Enabled: true # Bật giờ làm việc?
+  Timezone: "Asia/Ho_Chi_Minh" # Múi giờ của bạn, hãy dùng múi giờ từ danh sách: https://docs.plexdevelopment.net/frequently-asked-questions/valid-timezones
+  Schedule: # Chỉ sử dụng định dạng 24 giờ!
     Monday: "07:00-16:00"
     Tuesday: "07:00-16:00"
     Wednesday: "07:00-16:00"
@@ -95,809 +103,857 @@ WorkingHours: # Cấu hình cho thời gian hoạt động
     Friday: "07:00-16:00"
     Saturday: "07:00-16:00"
     Sunday: "07:00-16:00"
-  AllowTicketOutsideWorkingHours: false # Cho phép tạo ticket bên ngoài giờ làm?
-  SendNoticeInTicket: false # Nếu AllowTicketOutsideWorkingHours được bật, và nếu có người tạo ticket bên ngoài giờ làm, có nên gửi tin nhắn trong phiếu thông báo cho người dùng rằng phản hồi có thể bị trì hoãn không?
-  outsideWorkingHoursTitle: "Đã hết giờ làm"
-  outsideWorkingHours: "Bạn chỉ có thể tạo ticket trong giờ làm!\n\nThời gian:\nThứ Hai: {startTime-Monday} tới {endTime-Monday}\nThứ Ba: {startTime-Tuesday} tới {endTime-Tuesday}\nThứ Tư: {startTime-Wednesday} tới {endTime-Wednesday}\nThứ Năm: {startTime-Thursday} tới {endTime-Thursday}\nThứ Sáu: {startTime-Friday} tới {endTime-Friday}\nThứ Bảy: {startTime-Saturday} tới {endTime-Saturday}\nChủ Nhật: {startTime-Sunday} tới {endTime-Sunday}"
-  outsideWorkingHoursMsg: "Bạn đã tạo ticket bên ngoài giờ làm, vui lòng đợi do chúng tôi có thể trả lời muộn. {startTime-currentDay} tới {endTime-currentDay}" # Bạn có thể dùng {startTime} và {endTime}
+  AllowTicketsOutsideWorkingHours: true # Cho phép tạo ticket ngoài giờ làm việc?
+  SendNoticeInTicket: true # Nếu cho phép tạo ticket ngoài giờ, có nên gửi thông báo trong ticket rằng phản hồi có thể bị chậm?
+  outsideWorkingHoursTitle: "Ngoài Giờ Làm Việc"
+  outsideWorkingHours: "Bạn chỉ có thể tạo ticket trong giờ làm việc!\n\nLịch làm việc đầy đủ:\nThứ Hai: {startTime-Monday} đến {endTime-Monday}\nThứ Ba: {startTime-Tuesday} đến {endTime-Tuesday}\nThứ Tư: {startTime-Wednesday} đến {endTime-Wednesday}\nThứ Năm: {startTime-Thursday} đến {endTime-Thursday}\nThứ Sáu: {startTime-Friday} đến {endTime-Friday}\nThứ Bảy: {startTime-Saturday} đến {endTime-Saturday}\nChủ Nhật: {startTime-Sunday} đến {endTime-Sunday}"
+  outsideWorkingHoursMsg: "Bạn đã tạo ticket ngoài giờ làm việc, xin lưu ý rằng thời gian phản hồi có thể sẽ chậm hơn."
 
-# Nếu số lượng ticket vượt quá giới hạn tối đa
-# người tạo ticket sẽ nhận được tin nhắn cảnh báo thời gian phản hồi
-# có thể lâu hơn bình thường do lượng ticket quá nhiều
-# Điều này sẽ giúp ích cho người dùng trong thời gian cao điểm
+
+# Nếu số lượng ticket đang mở đạt hoặc vượt ngưỡng đã định (x),
+# người dùng khi mở ticket mới sẽ nhận được một thông báo cảnh báo rằng
+# thời gian phản hồi có thể sẽ lâu hơn bình thường do lượng ticket lớn.
+# Điều này giúp người dùng hiểu và kiên nhẫn trong thời gian cao điểm.
 TicketOverload:
   Enabled: true
-  Threshould: 10 # Số lượng ticket được mở chạm đến giới hạn cảnh báo (ví dụ: 10 hoặc nhiều hơn)
-  WarningMessage: "## ⚠️ Phát hiện số lượng lớn ticket! \n Trong thời gian có nhiều ticket được mở, thời gian phản hồi có thể lâu hơn bình thường. \n Chúng tôi sẽ cố gắng phản hồi nhanh nhất có thể! \n Cảm ơn bạn vì đã hiểu cho chúng tôi."
+  Threshold: 10  # Số lượng ticket đang mở để kích hoạt cảnh báo (VD: 10 ticket trở lên)
+  WarningMessage: "## ⚠️ Phát hiện lượng ticket cao! \n Do hiện tại đang có nhiều ticket đang chờ xử lý, thời gian phản hồi có thể sẽ lâu hơn bình thường. \n Chúng tôi rất mong bạn kiên nhẫn và sẽ hỗ trợ bạn sớm nhất có thể! \n Cảm ơn bạn đã thông cảm."
 
-# Tính năng này đảm bảo không có phiếu nào bị nhân viên bỏ sót, giúp ngăn ngừa trải nghiệm người dùng không tốt.
-# Tính năng này hoạt động bằng cách kiểm tra định kỳ tất cả các phiếu mở theo khoảng thời gian được đặt trong `CheckInterval`.
-# Nếu một phiếu đã mở và chờ nhân viên phản hồi lâu hơn ngưỡng `UnrespondedDuration`,
-# tính năng này sẽ gửi một thông báo cảnh báo đến kênh nhật ký đã chỉ định. Cảnh báo này thông báo cho nhân viên rằng phiếu đã quá hạn,
-# cung cấp thông tin chi tiết như phiếu đã mở và chưa được phản hồi trong bao lâu, cùng với liên kết đến phiếu.
-# Tính năng này giúp nhân viên ưu tiên các phiếu bị bỏ lỡ và đảm bảo phản hồi kịp thời.
+
+# Tính năng này đảm bảo không có ticket nào bị bỏ sót bởi đội ngũ hỗ trợ, giúp ngăn chặn trải nghiệm người dùng kém.
+# Hệ thống sẽ định kỳ kiểm tra tất cả các ticket đang mở theo khoảng thời gian đặt trong `CheckInterval`.
+# Nếu một ticket đã được mở và đang chờ phản hồi từ nhân viên trong thời gian vượt quá `UnrespondedDuration`,
+# bot sẽ gửi một cảnh báo đến kênh log được chỉ định. Cảnh báo sẽ thông báo rằng ticket đã bị quá hạn,
+# cung cấp chi tiết như thời gian mở ticket, thời gian chưa được phản hồi và liên kết đến ticket.
+# Điều này giúp đội ngũ hỗ trợ ưu tiên những ticket bị bỏ sót và đảm bảo phản hồi kịp thời.
+
 InactivityMonitor:
-  Emabled: false
-  CheckInterval: 1h # Thời gian check ticket không được trả lời (ví dụ: 7d, 3h, 5m)
-  UnrespondedDuration: 24h # Ngưỡng thời gian cho các ticket không được trả lời (ví dụ: 7d, 3h, 5m)
-  LogChannel: "CHANNEL_ID" # Kênh sẽ gửi cảnh báo
-  RolesToPing: ["ROLE_ID", "ROLE_ID"] # Có thể thêm nhiều
+  Enabled: false
+  CheckInterval: 1h  # Khoảng thời gian kiểm tra ticket không hoạt động (VD: 7d, 3h, 5m)
+  UnrespondedDuration: 24h  # Thời gian chờ phản hồi tối đa trước khi cảnh báo (VD: 7d, 3h, 5m)
+  LogChannel: "CHANNEL_ID"  # Kênh để gửi cảnh báo
+  RolesToPing: [" ", " "] # Bạn có thể thêm nhiều vai trò
   LogMessage: |
-    ## ⚠️ Cảnh báo ticket chưa được phản hồi
-    - **Ticket:** [Bấm vào đây]({ticketLink}) ({channel})
-    - **Thời gian tạo:** {ticketCreationDate}
-    - **Không được trả lời trong:** {unrespondedDuration}
+    ## ⚠️ Cảnh Báo Không Phản Hồi
+    - **Ticket:** [Nhấn vào đây]({ticketLink}) ({channel})
+    - **Được tạo lúc:** {ticketCreationDate}
+    - **Chưa phản hồi trong:** {unrespondedDuration}
 
-    Ticket này đã chờ phản hồi của nhân viên trong thời gian dài và người dùng có thể gặp phải sự chậm trễ. Vui lòng ưu tiên giải quyết phiếu này để cải thiện trải nghiệm của người dùng.
+    Ticket này đã chờ phản hồi từ nhân viên trong một khoảng thời gian dài và người dùng có thể đang gặp trải nghiệm chậm trễ. Vui lòng ưu tiên xử lý ticket này để cải thiện trải nghiệm người dùng.
 
-# =============================================================
-# CẤU HÌNH TICKETS LOG
-# =============================================================
+# ===========================================================================
+# CẤU HÌNH GHI LOG TICKET
+# ===========================================================================
 
 userAdd:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
-  
+  Enabled: true # Bật hoặc tắt log khi thêm người dùng vào ticket
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
+
 userRemove:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi xoá người dùng khỏi ticket
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 renameTicket:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi đổi tên ticket
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 ticketClose:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi ticket bị đóng
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 paypalInvoice:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi tạo hóa đơn PayPal
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
-cryptioPayments:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+cryptoPayments:
+  Enabled: true # Bật hoặc tắt log khi thanh toán bằng tiền điện tử
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 stripeInvoice:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi tạo hóa đơn Stripe
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 claimTicket:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi có người nhận xử lý ticket
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 unclaimTicket:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi huỷ nhận xử lý ticket
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
 deleteTicket:
-  Enabled: true # Bật hoặc tắt các logs này
-  ChannelID: "" # Kênh sẽ được gửi Logs. Để trống để sử dụng các đã cấu hình trong TicketSetting
+  Enabled: true # Bật hoặc tắt log khi ticket bị xoá
+  ChannelID: "" # Kênh để gửi log, để trống sẽ dùng kênh đã được chỉ định trong TicketSettings
 
-# ==================================================================
-# TICKET CATEGORIES/BUTTONS
-# ==================================================================
-# Nếu bạn xóa bất ký nút nào dưới đây bảng điều khiển sẽ không hoạt động, đặt Enabled thành false để tắt chúng đúng cách
-# Đảm bảo bot có role cao hơn người hỗ trợ nếu không sẽ không hoạt động
+# ===========================================================================
+# DANH MỤC TICKET / NÚT MỞ TICKET
+# ===========================================================================
+# Nếu bạn xóa bất kỳ nút nào bên dưới, lệnh /panel sẽ không hoạt động.
+# Vui lòng đặt `Enabled: false` nếu bạn muốn tắt chúng thay vì xóa.
+# Hãy đảm bảo role của bot nằm **trên** tất cả các role hỗ trợ, nếu không sẽ không hoạt động!
 
-# Đây là phần sẽ được gửi đến ticket khi nó được tạo
+# Đây là embed sẽ được gửi vào kênh ticket khi một ticket được tạo
 TicketOpenEmbed:
-  EmbedColor: "" # Mã màu hex, nếu để trống nó sẽ sử dụng mã màu mà bạn đã chỉ định
-  FooterMsg: "ZenKho" # Tin nhắn dưới chân, để trống nếu không có gì
-  FooterIcon: "https://cdn.discordapp.com/attachments/1378363930573017140/1380045187580956682/logo.png?ex=6847b8bc&is=6846673c&hm=cdf825e410319df46a58b712bf5a87817a6d868aecf76448d5542852c8bb0804&" # Ảnh cho chân, chỉ hoạt động nếu FooterMsg được ghi gì đó, để trống nếu không dùng
-  Timestamp: true # Hiện thời gian ở dưới chân?
-  UserIconThumbnail: true # Sử dụng avatar của người dùng trong thumbnail?
-  UserIconAuthor: true # Sử dụng avatar của người dùng trong lựa chọn chủ sở hữu
+  EmbedColor: "" # Màu viền của embed (dạng hex), để trống sẽ dùng màu mặc định đã cấu hình
+  FooterMsg: "" # Nội dung chân trang của embed, để trống nếu không muốn hiện
+  FooterIcon: "" # Icon ở chân trang, chỉ hoạt động nếu có nội dung `FooterMsg`, để trống nếu không muốn dùng
+  Timestamp: true # Hiển thị thời gian ở chân trang?
+  UserIconThumbnail: true # Hiển thị avatar người dùng ở thumbnail?
+  UserIconAuthor: true # Hiển thị avatar người dùng ở phần tác giả?
 
 # Nút 1
-TicketButton1: # Bạn không thể tắt nút đầu tiên này!
-  Ticketname: "Example 1" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
+TicketButton1: # Bạn không thể vô hiệu hóa nút đầu tiên!
+  TicketName: "Hỗ trợ kỹ thuật" # Tên nút và tên danh mục/ticket
+  Description: "" # Mô tả danh mục (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không dùng
+  TicketCategoryID: "1384818829875613776" # ID của category chứa kênh ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Dùng {category} để hiển thị tên danh mục
+  TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề của bạn và chờ phản hồi." # Dùng {user} cho tên người tạo ticket, {createdAt} cho thời gian tạo
+  ButtonEmoji: "" # Để trống nếu không muốn dùng emoji
   ButtonColor: "Green" # Blurple, Gray, Green, Red
-  SupportRoles: ["ROLE_ID"] # Người có vai trò có thể xem ticket trong danh mục này, có thể add nhiều
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
+  SupportRoles: [" "] # Các role có thể xem ticket, thêm nhiều nếu cần
+  MentionSupportRoles: false # Có mention role hỗ trợ khi ticket được tạo không?
+  ChannelName: "ticket-{username}" # Biến: {total-tickets}, {username}, {user-id}
+  RequiredRoles: [] # Các role bắt buộc để mở ticket, để trống nếu không cần
+  Questions: # Tối đa 5 câu hỏi cho mỗi danh mục (xóa hết để tắt)
     - customId: "needHelp" # Phải là duy nhất
-      required: false # Câu hỏi có bắt buộc không
+      required: false # Câu này có bắt buộc không?
       minLength: 20
-      question: "Bạn cần giúp gì?"
-      placeholder: "Mô tả bạn đang gặp vấn đề gì"
-      style: "Short" # Short, Paragraph
+      question: "Bạn cần hỗ trợ gì?" # Câu hỏi
+      placeholder: "Hãy mô tả rõ vấn đề bạn cần hỗ trợ"
+      style: "Short" # Short = 1 dòng, Paragraph = nhiều dòng
 
     - customId: "botVersion"
       required: true
       minLength: 2
-      question: "Phiên bản bạn đang sử dụng là gì?"
-      placeholder: "Phiên bản của bot"
+      question: "Bạn đang dùng phiên bản bot nào?"
+      placeholder: "Nhập phiên bản bot bạn đang dùng"
       style: "Short"
 
     - customId: "testQuestion"
       required: true
       minLength: 20
-      question: "Đây là câu hỏi thử nghiệm"
-      placeholder: "Đây chỉ là thử nghiệm"
+      question: "Đây là câu hỏi thử nghiệm?"
+      placeholder: "Ghi nội dung thử nghiệm vào đây"
       style: "Paragraph"
 
 # Nút 2
 TicketButton2:
-  Enabled: true # Bật nút thứ 2?
-  TicketName: "Example 2" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
+  Enabled: true # Bật danh mục thứ hai?
+  TicketName: "Báo lỗi hệ thống" # Tên nút và danh mục/ticket
+  Description: "" # Mô tả danh mục (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không cần
+  TicketCategoryID: "1384818829875613776" # ID của category chứa kênh ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Dùng {category} để hiện tên danh mục
+  TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả sự cố bạn gặp phải và chờ phản hồi." # Có thể dùng {user}, {createdAt}
+  ButtonEmoji: "" # Để trống nếu không muốn dùng emoji
   ButtonColor: "Red" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
+  SupportRoles: [" "] # Các role có quyền xem ticket, có thể thêm nhiều
+  MentionSupportRoles: false # Có mention role hỗ trợ khi mở ticket?
+  ChannelName: "ticket-{username}" # Các biến: {total-tickets}, {username}, {user-id}
+  RequiredRoles: [] # Các role bắt buộc để mở ticket (để trống nếu không cần)
+  Questions: # Tối đa 5 câu hỏi cho mỗi danh mục (xóa hết để tắt)
     - customId: "needHelp2" # Phải là duy nhất
-      required: true # Câu hỏi này có bắt buộc không?
+      required: true # Câu này có bắt buộc không?
       minLength: 20
-      question: "Bạn cần giúp gì?"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Bạn cần hỗ trợ gì?" # Câu hỏi
+      placeholder: "Hãy mô tả cụ thể vấn đề bạn đang gặp"
+      style: "Short" # Short = 1 dòng, Paragraph = nhiều dòng
 
 # Nút 3
 TicketButton3:
-  Enabled: true # Bật nút thứ 3?
-  TicketName: "Example 3" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
+  Enabled: true # Bật danh mục thứ ba?
+  TicketName: "Yêu cầu khác" # Tên nút và danh mục/ticket
+  Description: "" # Mô tả danh mục (chỉ dùng nếu bật SelectMenu), để trống nếu không dùng
+  TicketCategoryID: "1384818829875613776" # ID của Category chứa kênh ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn mở ticket, có thể dùng {category}
+  TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề của bạn và chờ phản hồi từ đội ngũ." # Có thể dùng {user}, {createdAt}
+  ButtonEmoji: "" # Để trống nếu không muốn có emoji
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp3" # Phải là duy nhất
-      required: true
+  SupportRoles: [" "] # Các role có quyền hỗ trợ trong danh mục này
+  MentionSupportRoles: false # Có tag các role hỗ trợ khi tạo ticket?
+  ChannelName: "ticket-{username}" # Tên kênh được tạo, dùng biến {total-tickets}, {username}, {user-id}
+  RequiredRoles: [] # Role bắt buộc để mở ticket (để trống nếu không yêu cầu)
+  Questions: # Tối đa 5 câu hỏi, xóa hết nếu không muốn dùng
+    - customId: "needHelp3" # ID duy nhất cho câu hỏi
+      required: true # Bắt buộc trả lời không?
       minLength: 20
-      question: "Bạn cần giúp gì?"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Vui lòng mô tả vấn đề hoặc yêu cầu của bạn?" # Câu hỏi
+      placeholder: "Nhập chi tiết bạn cần hỗ trợ"
+      style: "Short" # Short = ngắn, Paragraph = dài
+
 
 # Nút 4
 TicketButton4:
-  Emabled: true # Bật nút thứ 4?
-  TicketName: "Example 4" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
+  Enabled: true # Bật danh mục thứ tư?
+  TicketName: "Báo lỗi/Khẩn cấp" # Tên nút và danh mục ticket
+  Description: "" # Mô tả (chỉ hoạt động khi dùng SelectMenu), để trống nếu không dùng
+  TicketCategoryID: "1384818829875613776" # ID của Category chứa ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn khi mở ticket
+  TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả chi tiết sự cố và chờ phản hồi từ đội ngũ." # Tin nhắn mở đầu ticket
   ButtonEmoji: "" # Để trống nếu không có emoji
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp4" # Phải là duy nhất
+  SupportRoles: [" "] # Role có thể thấy và xử lý ticket
+  MentionSupportRoles: false # Có tag các role hỗ trợ trong ticket?
+  ChannelName: "ticket-{username}" # Tên kênh, dùng biến {username}, {user-id}, v.v.
+  RequiredRoles: [] # Role bắt buộc để mở ticket, để trống nếu không yêu cầu
+  Questions: # Tối đa 5 câu hỏi, xóa nếu không muốn dùng
+    - customId: "needHelp4"
       required: true
       minLength: 20
-      question: "Bạn cần giúp gì?"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Tôi có thể giúp gì?"
+      placeholder: "Mô tả chi tiết lỗi hoặc sự cố bạn đang gặp"
+      style: "Paragraph" # Short = ngắn, Paragraph = dài
+
 
 # Nút 5
 TicketButton5:
-  Enabled: true # Bật nút thứ 5?
-  TicketName: "Example 5" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
+  Enabled: true # Bật danh mục thứ năm?
+  TicketName: "Yêu cầu đặc biệt" # Tên nút và tên danh mục ticket
+  Description: "" # Mô tả (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không dùng
+  TicketCategoryID: "1384818829875613776" # ID Category chứa ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn trong ticket
+  TicketMessage: "> Cảm ơn bạn đã liên hệ với đội ngũ hỗ trợ.\n> Vui lòng ghi rõ nội dung yêu cầu của bạn và chờ nhân viên phản hồi." # Tin nhắn mở đầu
+  ButtonEmoji: "" # Để trống nếu không muốn emoji
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp5" # Phải là duy nhất
+  SupportRoles: [" "] # Role được xem/giải quyết ticket
+  MentionSupportRoles: false # Có ping role hỗ trợ khi mở ticket?
+  ChannelName: "ticket-{username}" # Tên kênh ticket, dùng {username}, {user-id},...
+  RequiredRoles: [] # Role yêu cầu để mở ticket, để trống nếu không có
+  Questions: # Câu hỏi khi tạo ticket (tối đa 5)
+    - customId: "needHelp5"
       required: true
       minLength: 20
-      question: "Bạn cần giúp gì"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Bạn cần hỗ trợ gì trong yêu cầu đặc biệt này?"
+      placeholder: "Mô tả rõ nội dung bạn muốn yêu cầu hoặc cần hỗ trợ"
+      style: "Paragraph" # Short = dòng ngắn, Paragraph = đoạn dài
 
-# (!) QUAN TRỌNG: Mục ở bên dưới chỉ hoạt động nếu SelectMenu được bật (Thanh chọn cho để chọn mục cho ticket)
-# (!) QUAN TRỌNG: Mục ở bên dưới chỉ hoạt động nếu SelectMenu được bật (Thanh chọn cho để chọn mục cho ticket)
-# (!) QUAN TRỌNG: Mục ở bên dưới chỉ hoạt động nếu SelectMenu được bật (Thanh chọn cho để chọn mục cho ticket)
+
+# (!) LƯU Ý: Các danh mục bên dưới CHỈ hoạt động nếu SelectMenu được bật (Menu thả xuống chọn danh mục ticket)
+# (!) LƯU Ý: Các danh mục bên dưới CHỈ hoạt động nếu SelectMenu được bật (Menu thả xuống chọn danh mục ticket)
+# (!) LƯU Ý: Các danh mục bên dưới CHỈ hoạt động nếu SelectMenu được bật (Menu thả xuống chọn danh mục ticket)
 
 # Nút 6
 TicketButton6:
-  Enabled: false # Bật nút thứ 6?
-  TicketName: "Example 6" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
-  ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp6" # Phải là duy nhất
-      required: true 
+  Enabled: false # Bật danh mục thứ 6?
+  TicketName: "Khác" # Tên nút và danh mục ticket (có thể dùng cho vấn đề chưa xác định)
+  Description: "Các yêu cầu không nằm trong danh mục cụ thể" # Chỉ hiển thị nếu bật SelectMenu
+  TicketCategoryID: "1384818829875613776" # ID của category chứa các ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn trong ticket
+  TicketMessage: "> Cảm ơn bạn đã liên hệ hỗ trợ.\n> Vui lòng mô tả vấn đề bạn gặp phải và chờ nhân viên hỗ trợ phản hồi." # Tin nhắn mở đầu
+  ButtonEmoji: "" # Để trống nếu không muốn thêm emoji
+  ButtonColor: "Gray" # Màu của nút (Blurple, Gray, Green, Red)
+  SupportRoles: [" "] # Role có thể truy cập và hỗ trợ ticket
+  MentionSupportRoles: false # Có ping role hỗ trợ không?
+  ChannelName: "ticket-{username}" # Tên kênh ticket, ví dụ: ticket-john
+  RequiredRoles: [] # Role yêu cầu để mở ticket (để trống nếu không cần)
+  Questions:
+    - customId: "needHelp6"
+      required: true
       minLength: 20
-      question: "Bạn cần giúp gì"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Vấn đề bạn gặp phải là gì?"
+      placeholder: "Vui lòng mô tả rõ ràng để chúng tôi hỗ trợ tốt hơn"
+      style: "Paragraph"
+
 
 # Nút 7
 TicketButton7:
-  Enabled: false # Bật nút thứ 7?
-  TicketName: "Example 7" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
-  ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp7" # Phải là duy nhất
+  Enabled: false # Bật danh mục thứ 7?
+  TicketName: "Khác (2)" # Tên nút và danh mục ticket – bạn có thể đổi tên theo mục đích cụ thể
+  Description: "Vấn đề chưa có trong các mục khác" # Hiển thị khi dùng SelectMenu
+  TicketCategoryID: "1384818829875613776" # ID của category chứa ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề gửi vào ticket
+  TicketMessage: "> Cảm ơn bạn đã liên hệ bộ phận hỗ trợ.\n> Vui lòng mô tả chi tiết vấn đề bạn gặp phải và chờ phản hồi từ nhân viên." # Tin nhắn mở đầu
+  ButtonEmoji: "" # Để trống nếu không cần emoji
+  ButtonColor: "Gray" # Màu nút
+  SupportRoles: [" "] # Role được xem và xử lý ticket
+  MentionSupportRoles: false # Có ping các role hỗ trợ khi mở ticket không?
+  ChannelName: "ticket-{username}" # Tên kênh ticket sẽ được tạo
+  RequiredRoles: [] # Yêu cầu role để mở ticket (để trống là ai cũng mở được)
+  Questions:
+    - customId: "needHelp7"
       required: true
       minLength: 20
-      question: "Bạn cần giúp gì"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Bạn cần hỗ trợ gì?"
+      placeholder: "Vui lòng mô tả rõ ràng để chúng tôi hỗ trợ nhanh hơn"
+      style: "Paragraph"
+
 
 # Nút 8
 TicketButton8:
-  Emabled: 8 # Bật nút thứ 8?
-  TicketName: "Example 8" # Đây là tên nút/mục
-  Description: "" # Mô tả mục, chỉ hoạt động nếu SelectMenu được bật, để trống để tắt
-  TicketCategoryID: "CATEGORY_ID" # ID danh mục kênh
-  TicketMessageTitle: "Kênh hỗ trợ ({category})" # Sử dụng {category} để lấy tên danh mục cho ticket được mở
-  TicketMessage: "> Cảm hơn bạn đã gọi hỗ trợ.\n> Làm ơn nói vấn đề của bạn và đợi chúng tôi phản hồi." # sử dụng {user} để lấy người tạo ticket, {createdAt} để lấy thời gian tạo ticket sử dụng Discord timestamp
-  ButtonEmoji: "" # Để trống nếu không có emoji
+  Enabled: false # Bật danh mục thứ 8?
+  TicketName: "Khác (3)" # Tên nút và danh mục ticket
+  Description: "Nếu vấn đề của bạn không nằm trong các danh mục khác" # Hiển thị nếu dùng SelectMenu
+  TicketCategoryID: "1384818829875613776" # ID của category chứa ticket
+  TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề gửi vào ticket
+  TicketMessage: "> Cảm ơn bạn đã liên hệ bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề và chờ phản hồi." # Tin nhắn mở đầu trong ticket
+  ButtonEmoji: "" # Để trống nếu không cần emoji
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
-  MentionSupportRoles: false # Tag người hỗ trợ trong ticket mới?
-  ChannelName: "ticket-{username}" # Khả dụng {total-tickets}, {username}, {user-id}
-  RequiredRoles: [] # Yêu cầu người tạo phải có role nào đó để tạo ticket trong chủ đề này? Có thể add nhiều
-  Questions: # Bạn có thể thêm tối đa 5 câu hỏi cho mỗi chủ đề! (Xóa toàn bộ câu hỏi để tắt)
-    - customId: "needHelp8" # Phải là duy nhất
+  SupportRoles: [" "] # Những role được phép xem ticket này
+  MentionSupportRoles: false # Có ping các role hỗ trợ khi mở ticket không?
+  ChannelName: "ticket-{username}" # Tên kênh ticket
+  RequiredRoles: [] # Role yêu cầu để mở ticket (để trống nếu ai cũng mở được)
+  Questions:
+    - customId: "needHelp8"
       required: true
       minLength: 20
-      question: "Bạn cần giúp gì"
-      placeholder: "Mô tả vấn đề của bạn"
-      style: "Short" # Short, Paragraph
+      question: "Bạn cần hỗ trợ gì?"
+      placeholder: "Vui lòng nêu rõ vấn đề bạn đang gặp"
+      style: "Paragraph" # Short hoặc Paragraph
 
-# =============================================================
-# HỆ THỐNG TICKET ƯU TIÊN
-# =============================================================
+# ===========================================================================
+# HỆ THỐNG ƯU TIÊN TICKET
+# ===========================================================================
 PrioritySettings:
-  Enabled: false
-  Levels: # Bạn có thể thêm không giới hạn ưu tiên
-    - priority: High 
-      rolesToMention: ["ROLE_ID", "ROLE_ID"] # Đề cập đến vai trò khi thiết lập mức độ ưu tiên này? Để trống để tắt
-      moveToTop: true # Di chuyển kênh ticket lên trên đầu danh mục
-      channelName: "🔴" # Sẽ được thêm vào trước tên thật của danh mục, để trống để tắt
+  Enabled: false # Bật hệ thống ưu tiên ticket? true = bật, false = tắt
+  Levels: # Có thể thêm không giới hạn các mức độ ưu tiên tùy chỉnh
+    - priority: Cao
+      rolesToMention: [""] # Các role sẽ bị ping khi ticket được đặt ưu tiên này (để trống nếu không muốn ping)
+      moveToTop: true # Di chuyển ticket lên đầu category không?
+      channelName: "🔴" # Ký hiệu thêm vào đầu tên kênh (ví dụ: 🔴ticket-username)
 
-    - priority: Medium
-      rolesToMention: ["ROLE_ID", "ROLE_ID"] # Đề cập đến vai trò khi thiết lập mức độ ưu tiên này? Để trống để tắt
-      moveToTop: true # Di chuyển kênh ticket lên trên đầu danh mục
-      channelName: "🟠" # Sẽ được thêm vào trước tên thật của danh mục, để trống để tắt
+    - priority: Trung bình
+      rolesToMention: [""]
+      moveToTop: true
+      channelName: "🟠"
 
-    - priority: Low
-      rolesToMention: ["ROLE_ID", "ROLE_ID"] # Đề cập đến vai trò khi thiết lập mức độ ưu tiên này? Để trống để tắt
-      moveToTop: true # Di chuyển kênh ticket lên trên đầu danh mục
-      channelName: "🟢" # Sẽ được thêm vào trước tên thật của danh mục, để trống để tắt
+    - priority: Thấp
+      rolesToMention: [""]
+      moveToTop: true
+      channelName: "🟢"
 
-PriorityRoles: # Khi người dùng có những vai trò này tạo một phiếu, mức độ ưu tiên sẽ tự động được đặt cho phiếu đó
-  Emabled: false
+PriorityRoles: # Khi người dùng có các role này tạo ticket, mức ưu tiên tương ứng sẽ được tự động áp dụng
+  Enabled: false # Bật chức năng tự động ưu tiên theo role? true = bật, false = tắt
   Roles:
-    - RoleID: "ROLE_ID"
-      PriorityLevel: High
+    - RoleID: ""
+      PriorityLevel: High # Khi người có role này tạo ticket -> ưu tiên Cao
 
-    - RoleID: "ROLE_ID"
-      PriorityLevel: Medium
-    # Thêm role nữa nếu cần
+    - RoleID: ""
+      PriorityLevel: Medium # Khi người có role này tạo ticket -> ưu tiên Trung bình
+    # Thêm nhiều role khác tùy ý
 
-# ==============================================================
-# HỆ THỐNG ĐÁNH GIÁ TICKET VÀ NGƯỜI DÙNG ĐÓNG DM
-# ==============================================================
+# =========================================================================== 
+# HỆ THỐNG ĐÁNH GIÁ HỖ TRỢ & GỬI TIN NHẮN KHI TICKET ĐÓNG
+# ===========================================================================
+
 TicketUserCloseDM:
-  Enabled: true # Gửi tin nhắn đến người tạo ticket khi đóng ticket?
-  SendTranscript: false # Gửi bản ghi cùng với tin nhắn?
-  TicketInformation: true # Thêm thông tin của ticket vào embed? (tổng tin nhắn, nhận bởi, danh mục,...)
-  CloseEmbedMsg: "> Ticket của bạn đã đóng tại ``{guildName}``\n> Lý do: ``{close-reason}``" # Sử dụng {guildName} cho tên server của bạn, sử dụng {closedAt} to lấy thời gian đóng bằng Discord timestamp, sử dụng {close-reason} cho lý do đóng
+  Enabled: true # Gửi tin nhắn cho người dùng khi ticket của họ bị đóng?
+  SendTranscript: false # Gửi bản transcript (nội dung cuộc trò chuyện) kèm theo tin nhắn?
+  TicketInformation: true # Thêm thông tin về ticket vào embed? (tổng số tin nhắn, ai xử lý, loại hỗ trợ, v.v...)
+  CloseEmbedMsg: "> Ticket của bạn đã được đóng trong máy chủ ``{guildName}``\n> Lý do: ``{close-reason}``"
+  # Các biến có thể dùng: {guildName}, {closedAt}, {close-reason}
 
 TicketReviewSettings:
-  Enabled: true # Bật đánh giá ticket? (Gửi tin nhắn cho người tạo với lựa chọn để chọn 1-5 sao)
-  AskWhyModal: true # Hỏi người dùng giải thích tại sao họ đưa ra đánh giá như vậy?
-  CloseEmbedReviewMsg: "> Ticket của bạn đã đóng tại ``{guildName}``\n> Lý do ``{close-reason}``\n\n> Chúng tôi đánh giá cao đánh giá của bạn và sẽ cải thiện thêm sau này.\n >Bạn có thể dành chút thời gian để chia sẻ sự hài lòng của bạn về sự hỗ trợ của chúng tôi bằng cách chọn giữa **1-5** sao bên dưới. Ý kiến của bạn rất có giá trị với chúng tôi!" # Sử dụng {guildName} cho tên server, sử dụng {closeAt} để lấy thời gian đóng với Discord timestamp, sử dụng {close-reason} cho lý do đóng
-  ticketRated: "> Bạn đã đánh giá: {star} ({rating}/5)"
-  ticketReviewed: "> Bạn đã đánh giá: {star} ({rating}/5)\n> Đánh giá của bạn: {reviewMessage}"
-  ReviewMsg: "Cảm ơn bạn vì đã để lại đánh giá"
-  MinimumWords: 20
-  MaximimWords: 250 # Khuyến cáo nên ít hơn 250
+  Enabled: true # Bật hệ thống đánh giá ticket? (Gửi tin nhắn cho người dùng khi ticket bị đóng để họ đánh giá từ 1-5 sao)
+  AskWhyModal: true # Hỏi người dùng lý do vì sao họ chọn mức đánh giá đó?
+  CloseEmbedReviewMsg: "> Ticket của bạn đã được đóng trong máy chủ ``{guildName}``\n> Lý do: ``{close-reason}``\n\n> Chúng tôi rất mong nhận được phản hồi từ bạn.\n> Vui lòng chọn mức độ hài lòng từ **1-5** sao bên dưới. Mỗi đánh giá đều rất quý giá với chúng tôi!"  
+  # Các biến có thể dùng: {guildName}, {closedAt}, {close-reason}
+
+  ticketRated: "> Bạn đã đánh giá ticket này: {star} ({rating}/5)"
+  ticketReviewed: "> Bạn đã đánh giá ticket này: {star} ({rating}/5)\n> Đánh giá của bạn: {reviewMessage}"
+  ReviewMsg: "Cảm ơn bạn đã để lại đánh giá!"
+  MinimumWords: 20 # Tối thiểu bao nhiêu ký tự người dùng cần viết nếu có modal lý do
+  MaximumWords: 250 # Nên để dưới 250 để tránh spam/dài dòng
 
 TicketReviewRequirements:
-  Enabled: true # Cho phép yêu cầu xem xét phiếu yêu cầu để ngăn chặn lạm dụng/thư rác?
-  TotalMessages: 5 # Số lượng tin nhắn trong ticket để được phép xem nó
+  Enabled: false # Có yêu cầu điều kiện để được đánh giá ticket không? (dùng để tránh spam)
+  TotalMessages: 5 # Phải có ít nhất bao nhiêu tin nhắn trong ticket thì người dùng mới được phép đánh giá?
 
-# Nếu tùy chọn này được bật và AskWhyModal được bật, tất cả các đánh giá cũng sẽ được gửi đến một kênh riêng với nhiều thông tin chi tiết hơn về đánh giá, hữu ích nếu bạn muốn hiển thị đánh giá của mình cho mọi người trên máy chủ
-ReviewChannel:
-  Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh sẽ gửi đánh giá
+
+# Nếu được bật cùng với AskWhyModal, tất cả đánh giá sẽ được gửi tới một kênh riêng biệt
+# Điều này rất hữu ích nếu bạn muốn công khai đánh giá để người khác trên server thấy
+
+ReviewChannel: 
+  Enabled: false # Bật/tắt tính năng gửi đánh giá vào kênh riêng
+  ChannelID: "CHANNEL_ID" # ID kênh sẽ nhận đánh giá (dạng text channel)
+
   Embed:
-    Title: "Đánh giá ticket mới (#{totalReviews})" # Để trống để tắt, khả dụng: {totalReview}, {ticketCreate.username}, {ticketCategory}, {ticket.totalMessages}
-    Color: "#3498db" # Mã màu hex, để trống để sử dụng mặc định
-    ThumbnailEnabled: true
-    CustomThumbnail: "" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh
-    Fields: # Khả dụng: {ticketCreator.id}, {ticketCreator.username}, {ticketCategory}. {ticket.totalMessages},
-      - name: "• Thông tin ticket"
-        value: "> Người tạo: <@!{ticketCreate.id}> ({ticketCreator.username})\n> Danh mục: {ticketCategory}\n> Tổng tin nhắn: {ticket.totalMessages}"
-      - name: "• Đánh giá ticket"
-        value: "> {stars}\n {reviewMessage}"
-    Timestamp: true
-    Footer:
-      Enabled: true
-      IconEnabled: true
-      CustomIconURL: "" # Để trống để sử dụng avatar của người dùng, hoặc dùng URL ảnh, CHỈ HOẠT ĐỘNG NẾU TEXT KHÔNG TRỐNG
-      text: "{ticketCreator.username}" # Khả dụng: {ticketCreator.username}, {ticketCategory}, {ticket.totalMessages}
+    Title: "Đánh Giá Mới Về Ticket (#{totalReviews})" # Tiêu đề embed, có thể dùng biến: {totalReviews}, {ticketCreator.username}, {ticketCategory}, {ticket.totalMessages}
+    Color: "#3498db"  # Màu của embed (mã HEX), để trống sẽ dùng màu mặc định của bot
+    ThumbnailEnabled: true # Hiển thị avatar bên góc phải của embed?
+    CustomThumbnail: ""  # Để trống sẽ dùng avatar của người đánh giá, hoặc chèn URL ảnh tùy chỉnh
 
-# ==================================================================
+    Fields: # Các mục chi tiết của đánh giá
+      - name: "• Thông Tin Ticket"
+        value: "> Người Tạo: <@!{ticketCreator.id}> ({ticketCreator.username})\n> Loại Ticket: {ticketCategory}\n> Tổng Tin Nhắn: {ticket.totalMessages}"
+      
+      - name: "• Nội Dung Đánh Giá"
+        value: "> {stars}\n> {reviewMessage}"
+
+    Timestamp: true # Thêm thời gian đánh giá vào embed
+
+    Footer:
+      Enabled: true # Bật dòng footer
+      IconEnabled: true # Hiển thị icon (ảnh đại diện hoặc ảnh tùy chỉnh)
+      CustomIconURL: "" # Nếu muốn ảnh riêng ở footer, chèn URL ảnh vào đây, để trống sẽ dùng avatar người đánh giá
+      text: "{ticketCreator.username}" # Văn bản dưới cùng – có thể dùng: {ticketCreator.username}, {ticketCategory}, {ticket.totalMessages}
+
+# ===========================================================================
 # HÓA ĐƠN PAYPAL
-# ==================================================================
-PayPalSetings:
-  Enabled: false # Bật lệnh cho hóa đơn paypal?
-  PayPalSecretKey: "PAYPAL_SECRET_KEY" # API Secret Key của PayPal
-  PayPalClientID: "PAYPAL_CLIENT_ID" # PayPal API Client ID
-  AllowedRoles: ["ROLE_ID"] # Người đươc phép sử dụng lệnh paypal, có thể thêm nhiều
-  Email: "EMAIL" # Email của tài khoản PayPal
-  Currency: "USD"
-  CurrencySymbol: "$"
-  OnlyInTicketChannels: false # Chỉ được phép dùng trong ticket?
-  Description: "Điều khoản: https://zenkho.top" # Điều khoản, bạn có thể thêm bất cứ thứ gì khác vào đây
-  Logo: "" # Logo sẽ được hiển thị trong hóa đơn, để trống để sử dụng logo của server
-  RoleToGive: "" # Người dùng có nhận được role khi họ thanh toán hóa đơn không, để trống để tắt
-  StatusUnpaid: "UNPAID"
-  StatusPaid: "PAID"
-  Embed:
-    Title: "Hóa đơn PayPal" # Để trống để tắt, khả dụng: {seller.username}, {user.username}
-    Color: "#5e99ff" # Mã màu hex, để trống để sử dụng mặc định của bot
-    ThumbnailEnabled: true
-    CustomThumbnail: "https://www.freepnglogos.com/uploads/paypal-logo-png-7.png" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh
-    Description: "Vui lòng bấm nút bên dưới để mua!"
-    Fields: # Khả dụng: {seller}, {seller.username}, {user}, {user.username}, {service}, {price}
-      - name: "• Thông tin"
-        value: "> Người bán: {seller}\n> Người mua: {user}\n> Giá: {price}"
-      - name: "• Dịch vụ"
-        value: "```{service}```"
-    Timestamp: true
-    Footer:
-      Enabled: true
-      IconEnabled: true
-      CustomIconURL: "" # Để trống để sử dụng avatar của người dùng, hoặc dùng URL ảnh, CHỈ HOẠT ĐỘNG NẾU TEXT KHÔNG TRỐNG
-      text: "{user.username}" # Khả dụng: {user.username}
+# ===========================================================================
+PayPalSettings:
+  Enabled: false # Bật chức năng tạo hóa đơn PayPal?
+  PayPalSecretKey: "PAYPAL_SECRET_KEY" # Khóa bí mật API PayPal (Live)
+  PayPalClientID: "PAYPAL_CLIENT_ID" # Client ID API PayPal (Live)
+  AllowedRoles: [" "] # Các role được phép dùng lệnh PayPal, có thể thêm nhiều role
+  Email: "EMAIL" # Email của tài khoản PayPal nhận tiền
+  Currency: "USD" # Đơn vị tiền tệ
+  CurrencySymbol: "$" # Ký hiệu tiền tệ
+  OnlyInTicketChannels: false # Chỉ cho phép sử dụng lệnh này trong kênh ticket?
+  Description: "Điều khoản dịch vụ: https://plexdevelopment.net/tos" # Mô tả hóa đơn, có thể chèn link TOS, dịch vụ...
+  Logo: "" # Logo hiển thị trên hóa đơn, để trống sẽ dùng biểu tượng của server
+  RoleToGive: "" # Có cấp role cho người dùng sau khi thanh toán thành công không? Để trống để tắt
+  StatusUnpaid: "CHƯA THANH TOÁN"
+  StatusPaid: "ĐÃ THANH TOÁN"
 
-# =============================================================
+  Embed:
+    Title: "Hóa Đơn PayPal" # Tiêu đề của embed, để trống để tắt, có thể dùng: {seller.username}, {user.username}
+    Color: "#5e99ff"  # Màu của embed (mã HEX), để trống để dùng màu mặc định
+    ThumbnailEnabled: true # Hiển thị ảnh thu nhỏ bên phải?
+    CustomThumbnail: "https://www.freepnglogos.com/uploads/paypal-logo-png-7.png"  # Để trống sẽ dùng avatar người dùng, hoặc chèn ảnh riêng
+    
+    Description: "Vui lòng nhấn nút bên dưới để thanh toán!"
+
+    Fields:
+      - name: "• Thông Tin"
+        value: "> Người Bán: {seller}\n> Người Mua: {user}\n> Giá: {price}"
+
+      - name: "• Dịch Vụ"
+        value: "```{service}```"
+
+    Timestamp: true # Hiển thị thời gian trên embed
+
+    Footer:
+      Enabled: true # Hiển thị dòng cuối?
+      IconEnabled: true # Hiện ảnh đại diện bên cạnh dòng cuối?
+      CustomIconURL: ""  # Ảnh tùy chỉnh cho footer, để trống sẽ dùng avatar người dùng
+      text: "{user.username}" # Văn bản ở dòng cuối, có thể dùng {user.username}
+
+# ===========================================================================
 # HÓA ĐƠN STRIPE
-# =============================================================
+# ===========================================================================
 StripeSettings:
-  Enabled: false # Bật hóa đơn Stripe?
-  StripeSecretKey: "SECRET_KEY" # API Stripe Secret Key
-  AllowedRoles: ["ROLE_ID"] # Những role được phép sử dụng lệnh, có thể thêm nhiều
-  Currency: "USD"
-  CurrencySymbol: "$"
-  OnlyInTicketChannels: false # Chỉ cho phép lệnh hoạt động trong ticket?
-  RoleToGive: "" # Có nên thêm role trong khi họ thanh toán không? Để trống để tắt
-  PatmentMethods: 
-    - card
-  StatusUnpaid: "UNPAID"
-  StatusPaid: "PAID"
+  Enabled: false # Bật chức năng tạo hóa đơn Stripe?
+  StripeSecretKey: "SECRET_KEY" # Khóa bí mật API Stripe
+  AllowedRoles: [" "] # Các role được phép dùng lệnh Stripe, có thể thêm nhiều role
+  Currency: "USD" # Đơn vị tiền tệ
+  CurrencySymbol: "$" # Ký hiệu tiền tệ
+  OnlyInTicketChannels: false # Chỉ cho phép sử dụng lệnh này trong kênh ticket?
+  RoleToGive: "" # Có cấp role cho người dùng sau khi thanh toán thành công không? Để trống để tắt
+  PaymentMethods:
+    - card # Các phương thức thanh toán được chấp nhận (ở đây là thẻ tín dụng/thẻ ghi nợ)
+  StatusUnpaid: "CHƯA THANH TOÁN"
+  StatusPaid: "ĐÃ THANH TOÁN"
+
   Embed:
-    Title: "Hóa đơn Stripe" # Để trống để tắt, khả dụng: {seller.username}, {user.username}
-    Color: "#5e99ff" # Mã màu hex, để trống để sử dụng mặc định của bot
-    ThumbnailEnabled: true
-    CustomThumbnail: "https://assets.website-files.com/60d5e12b5c772dbf7315804e/6127ddadabd8205a78c21a42_sq.png" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh
-    Description: "Vui lòng bấm nút bên dưới để thanh toán!"
-    Fields: # Khả dụng: {seller}, {seller.username}, {user}, {user.username}, {service}, {price}
-      - name: "• Thông tin"
-        value: "> Người bán: {seller}\n> Người mua: {user}\n> Giá: {price}"
-      - name: "• Dịch vụ"
+    Title: "Hóa Đơn Stripe" # Tiêu đề của embed, để trống để tắt, có thể dùng {seller.username}, {user.username}
+    Color: "#5e99ff"  # Màu của embed (mã HEX), để trống để dùng màu mặc định
+    ThumbnailEnabled: true # Hiển thị ảnh thu nhỏ bên phải?
+    CustomThumbnail: "https://assets.website-files.com/60d5e12b5c772dbf7315804e/6127ddadabd8205a78c21a42_sq.png"  # Để trống sẽ dùng avatar người dùng, hoặc chèn ảnh riêng
+
+    Description: "Vui lòng nhấn nút bên dưới để thanh toán!"
+
+    Fields:
+      - name: "• Thông Tin"
+        value: "> Người Bán: {seller}\n> Người Mua: {user}\n> Giá: {price}"
+
+      - name: "• Dịch Vụ"
         value: "```{service}```"
-    Timestamp: true
+
+    Timestamp: true # Hiển thị thời gian trên embed
+
     Footer:
-      Enabled: true
-      IconEnabled: true
-      CustomIconURL: "" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh, CHỈ HOẠT ĐỘNG NẾU TEXT KHÔNG TRỐNG
-      text: "{user.username}" # Khả dụng: {user.username}
+      Enabled: true # Hiển thị dòng cuối?
+      IconEnabled: true # Hiện ảnh đại diện bên cạnh dòng cuối?
+      CustomIconURL: ""  # Ảnh tùy chỉnh cho footer, để trống sẽ dùng avatar người dùng
+      text: "{user.username}" # Văn bản ở dòng cuối, có thể dùng {user.username}
 
-# Đối với phương thức thanh toán, bạn có thể thêm thông tin sau, xin lưu ý rằng một số loại tiền tệ không hỗ trợ một số phương thức thanh toán nhất định
-# ach_credit_transfer, ach_debit, acss_debit, au_becs_debit, bacs_debit, bancontact, boleto, card, cashapp, customer_balance, eps, fpx, giropay, grabpay, ideal, konbini, link, p24, paynow, paypal, promptpay, sepa_debit, sofort, us_bank_account, or wechat_pay
-
-# ==============================================================
-# THANH TOÁN CRYPTO
-# ==============================================================
+# ===========================================================================
+# THANH TOÁN BẰNG TIỀN MÃ HÓA (CRYPTO)
+# ===========================================================================
 CryptoSettings:
-  Enabled: false # Bật lệnh crypto?
-  AllowedRoles: ["ROLE_ID"] # Những role được phép sử dụng lênh, bạn có thể thêm nhiều
-  Currency: "USD" # Giá trị sẽ được đổi sang crypto
-  CurrencySymbol: "$"
-  OnlyInTicketChannels: false # Chỉ cho phép lệnh chạy trong kênh ticket?
+  Enabled: false # Bật chức năng thanh toán bằng tiền mã hóa?
+  AllowedRoles: [" "] # Những role được phép sử dụng lệnh crypto, có thể thêm nhiều role
+  Currency: "USD" # Đơn vị tiền quy đổi sang crypto
+  CurrencySymbol: "$" # Ký hiệu tiền tệ hiển thị
+  OnlyInTicketChannels: false # Chỉ cho phép sử dụng trong kênh ticket?
+
   Embed:
-    Title: "Thanh toán crypto ({currency})" # Để trống để tắt, khả dụng: {seller.username}, {user.username}, {currency}
-    Color: "#5e99ff" # Mã màu hex, để trống để sử dụng mặc định của bot
-    ThumbnailEnabled: true
-    CustomThumbnail: "https://i.imgur.com/ASvkLsG.png" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh
-    Description: "Quét mã bên dưới để mua với số tiền chính xác"
-    Fields: # Khả dụng: {seller}, {seller.username}, {user}, {user.username}, {service}, {price}, {address}
-      - name: "• Thông tin"
-        value: "> Người bán: {seller}\n> Người mua: {user}\n>Giá: {price}\n> Địa chỉ: {address}"
-      - name: "• Dịch vụ"
+    Title: "Thanh Toán Crypto ({currency})" # Tiêu đề embed, để trống để tắt; biến khả dụng: {seller.username}, {user.username}, {currency}
+    Color: "#5e99ff"  # Màu nền embed (mã HEX), để trống để dùng mặc định
+    ThumbnailEnabled: true # Hiển thị hình ảnh bên phải embed?
+    CustomThumbnail: "https://i.imgur.com/ASvkLsG.png"  # Để trống để dùng avatar người dùng hoặc link ảnh riêng
+
+    Description: "Quét mã QR bên dưới hoặc gửi đúng số tiền đến địa chỉ ví bên dưới."
+
+    Fields:
+      - name: "• Thông Tin"
+        value: "> Người Bán: {seller}\n> Người Mua: {user}\n> Giá: {price}\n> Địa chỉ ví: {address}"
+
+      - name: "• Dịch Vụ"
         value: "```{service}```"
-    Timestamp: true
+
+    Timestamp: true # Hiển thị thời gian trong embed
+
     Footer:
-      Enabled: true
-      IconEnabled: true
-      CustomIconURL: "" # Để trống để sử dụng avatar của người dùng, hoặc sử dụng URL ảnh, CHỈ HOẠT ĐỘNG NẾU TEXT KHÔNG TRỐNG
-      text: "{user.username}" # Khả dụng: {user.username}
+      Enabled: true # Hiển thị dòng cuối?
+      IconEnabled: true # Hiển thị biểu tượng người dùng cạnh dòng cuối?
+      CustomIconURL: ""  # Link ảnh biểu tượng tùy chỉnh, để trống sẽ dùng avatar người dùng
+      text: "{user.username}" # Nội dung dòng cuối, có thể dùng {user.username}
 
 CryptoRates:
-  binance: false # Sử dụng tỉ giá binance
-  bitfinex: false # Sử dụng tỉ giá bitfinex
-  coinbase: true # Sử dụng tỉ giá coinbase
-  kraken: false # Sử dụng tỉ giá kraken
+  binance: false  # Sử dụng tỷ giá từ Binance?
+  bitfinex: false # Sử dụng tỷ giá từ Bitfinex?
+  coinbase: true  # Sử dụng tỷ giá từ Coinbase?
+  kraken: false   # Sử dụng tỷ giá từ Kraken?
 
-# Địa chỉ ví dùng với lệnh crypto
-CryptoAddress:
-  BTC: ""
-  ETH: ""
-  USDT: ""
-  LTC: ""
+# Địa chỉ ví có thể được bot gửi kèm khi dùng lệnh crypto
+CryptoAddresses:
+  BTC: ""  # Địa chỉ ví Bitcoin
+  ETH: ""  # Địa chỉ ví Ethereum
+  USDT: "" # Địa chỉ ví USDT
+  LTC: ""  # Địa chỉ ví Litecoin
 
-# =================================================================
-# HỆ THỐNG GỢI Ý
-# =================================================================
+# ===========================================================================
+# HỆ THỐNG GỢI Ý (SUGGESTION SYSTEM)
+# ===========================================================================
 SuggestionSettings:
   Enabled: true # Bật hệ thống gợi ý?
-  ChannelID: "CHANNEL_ID" # Kênh mà các gợi ý sẽ được gửi
-  EnabledAcceptDenySystem: true # Bật hệ thống từ chối cho gợi ý? (nếu điều này bị vô hiệu hóa, các nút chấp nhận, từ chối và trạng thái sẽ tự động bị xóa)
-  RemoveAllBttonsifAcceptedOrDenied: true # Xóa tất cả các nút khỏi một gợi ý nếu nó được chấp nhận hoặc bị từ chối?
-  AllowedRoles: ["ROLE_ID"] # Người với role có thể đồng ý hoặc từ chối gợi ý, có thể thêm nhiều
-  LogsChannel: "ChannelID" # Kênh sẽ được gửi các upvote, downvote, accept, deny, Để trống để tắt
-  CreateThreads: true # Tạo một chủ đề cho mỗi đề xuất để người dùng có thể thảo luận về chúng?
+  ChannelID: "1384853509559816223" # Kênh nơi tất cả gợi ý sẽ được đăng
+  EnableAcceptDenySystem: false # Bật hệ thống Chấp nhận/Từ chối cho gợi ý? (nếu tắt, nút accept/deny & trạng thái sẽ tự ẩn)
+  RemoveAllButtonsIfAcceptedOrDenied: true # Xóa mọi nút trên gợi ý khi nó đã được accept hoặc deny?
+  AllowedRoles: [" "] # Các role được phép accept/deny gợi ý (có thể thêm nhiều)
+  LogsChannel: "" # Kênh ghi log upvote/downvote/accept/deny; để trống để tắt
+  CreateThreads: true # Tạo thread riêng cho mỗi gợi ý để người dùng thảo luận?
 
-# QUAN TRỌNG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Để đồng ý hoặc từ chối gợi ý, chuột phải vào tin nhắn gợi ý trong Discord, và chọn "Apps"
+# QUAN TRỌNG!
+# Để accept hoặc deny một gợi ý, hãy nhấp phải vào tin nhắn gợi ý trong Discord,
+# chọn mục "Apps" và chọn lệnh tương ứng.
 
 SuggestionStatuses:
-  Pending: "🟠 Chờ đợi"
-  Accepted: "🟢 Đồng ý"
-  Denied: "🔴 Từ chối"
+  Pending: "🟠 Đang chờ duyệt"
+  Accepted: "🟢 Đã chấp nhận"
+  Denied: "🔴 Đã từ chối"
 
 SuggestionStatusesEmbedColors:
-  Pending: "#5e99ff" # Màu sẽ được đặt cho embed cho gợi ý đang chờ (mã màu hex)
-  Accepted: "#2ECC71" # Màu sẽ được đặt cho embed cho gợi ý đã được chấp nhận (mã màu hex)
-  Denied: "#E74C3C" # Màu sẽ được đặt cho embed cho gợi ý bị từ chối (mã màu hex)
+  Pending: "#5e99ff" # Màu nền của embed khi gợi ý đang chờ
+  Accepted: "#2ECC71" # Màu nền của embed khi gợi ý được chấp nhận
+  Denied: "#E74C3C" # Màu nền của embed khi gợi ý bị từ chối
 
 SuggestionUpvote:
-  ButtonName: "Upvote"
+  ButtonName: "Ủng hộ"
   ButtonEmoji: "⬆️"
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
 
-SuggestionDownVote:
-  ButtonName: "Downvote"
+SuggestionDownvote:
+  ButtonName: "Không ủng hộ"
   ButtonEmoji: "⬇️"
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
 
-SuggestionResevote:
-  ButtonName: "Reset Vote"
+SuggestionResetvote:
+  ButtonName: "Đặt lại phiếu"
   ButtonEmoji: "🗑️"
   ButtonColor: "Gray" # Blurple, Gray, Green, Red
 
 SuggestionAccept:
-  Emoji: "🟢"
+  Emoji: "🟢"  # Biểu tượng cảm xúc khi chấp nhận gợi ý
 
 SuggestionDeny:
-  Emoji: "🔴"
+  Emoji: "🔴"  # Biểu tượng cảm xúc khi từ chối gợi ý
 
-# ===================================================================
-# LỆNH TÙY CHỈNH
-# ===================================================================
-CommandsEnabled: false
-OnlyInTickets: false # Có bật chỉ có thể hoạt động trong ticket không
-CommandsPrefix: "t!" # Ký hiệu sẽ được dùng cho lệnh tùy chỉnh
+# =========================================================================== 
+# LỆNH TUỲ CHỈNH
+# ===========================================================================
+CommandsEnabled: false # Bật hệ thống lệnh tùy chỉnh?
+OnlyInTickets: false # Chỉ được dùng các lệnh này trong ticket?
+CommandsPrefix: "t!" # Tiền tố để dùng lệnh
 
-CustomCommands: # Có thể thêm không giới hạn lệnh!
-  - command: "test1"
-    response: "Đây là thử nghiệm!"
-    Embed: false # Sử dụng embed thay vì tin nhắn bình thường
-    deleteMsg: true # Xóa tin nhắn của người sử dụng lệnh? (Nên để giá trị này là false nếu replyToUser được đặt thành true)
-    replyToUser: false # Trả lời tin nhắn của người đã gửi lệnh?
+CustomCommands: # Bạn có thể thêm bao nhiêu lệnh tùy thích!
+  - command: "test1" # Lệnh là: t!test1
+    response: "Đây là một bài test!" # Tin nhắn bot trả về
+    Embed: false # Có hiển thị bằng embed không?
+    deleteMsg: true # Có xoá tin nhắn người dùng sau khi gửi không?
+    replyToUser: false # Có tag người gửi lại khi phản hồi không?
 
   - command: "test2"
-    response: "Đây là thử nghiệm!"
-    Embed: false # Sử dụng embed thay vì tin nhắn bình thường
-    deleteMsg: true # Xóa tin nhắn của người sử dụng lệnh? (Nên để giá trị này là false nếu replyToUser được đặt thành true)
-    replyToUser: false # Trả lời tin nhắn của người đã gửi lệnh?
+    response: "Đây là một bài test!"
+    Embed: false
+    deleteMsg: true
+    replyToUser: false
 
   - command: "test3"
-    response: "Đây là thử nghiệm!"
-    Embed: false # Sử dụng embed thay vì tin nhắn bình thường
-    deleteMsg: true # Xóa tin nhắn của người sử dụng lệnh? (Nên để giá trị này là false nếu replyToUser được đặt thành true)
-    replyToUser: false # Trả lời tin nhắn của người đã gửi lệnh?
+    response: "Đây là một bài test!"
+    Embed: false
+    deleteMsg: true
+    replyToUser: false
 
-# ===========================================================================
+# =========================================================================== 
 # PHẢN HỒI TỰ ĐỘNG
-# ================================================================================
-# Phần này cấu hình hệ thống Phản hồi tự động cho bot của bạn. Hệ thống sử dụng
-# độ tương tự chuỗi để khớp tin nhắn của người dùng với các phản hồi được xác định trước. Ngay cả khi
-# tin nhắn của người dùng không khớp chính xác, bot sẽ phản hồi nếu điểm tương tự
-# cao hơn Ngưỡng tin cậy đã cấu hình.
-#
+# ===========================================================================
+# Mục này cấu hình hệ thống phản hồi tự động cho bot. Hệ thống sử dụng
+# so sánh độ tương đồng của chuỗi để tìm câu trả lời phù hợp. Ngay cả khi 
+# tin nhắn người dùng không trùng chính xác, bot vẫn sẽ phản hồi nếu điểm 
+# tương đồng vượt qua ngưỡng đã thiết lập.
+
 # ConfidenceThreshold:
-# Điểm tương đồng tối thiểu (0,0 đến 1,0) cần thiết để
-# kích hoạt Phản hồi tự động. Các giá trị thấp hơn làm tăng tính linh hoạt nhưng có thể gây ra
-# kết quả dương tính giả; các giá trị cao hơn làm cho các kết quả khớp chặt chẽ hơn.
-# Ví dụ: Ngưỡng 0,7 có nghĩa là tin nhắn của người dùng phải khớp ít nhất 70% với khóa đã cấu hình.
+# Điểm tương đồng tối thiểu (từ 0.0 đến 1.0) để bot phản hồi.
+# Giá trị thấp sẽ khiến bot linh hoạt hơn nhưng dễ phản hồi nhầm;
+# Giá trị cao thì yêu cầu tin nhắn phải gần giống chính xác hơn.
 
 AutoResponse:
-  Enabled: true
-  OnlyInTickets: false # Chỉ phản hồi từ động trong ticket?
-  ConfidenceThreshold: 0.7 # Độ trùng hợp tối thiểu để kích hoạt phản hồi tự động (0,0 đến 1,0)
-  Response: # Tin nhắn yêu cầu, phản hồi, bạn có thể thêm không giới hạn
-    "IP server là gì":
-      Message: "IP server là 123.123.123.123. Bạn có thể sử dụng nó để vào server của chúng tôi!"
-      Type: "EMBED" # EMBED hoặc TEXT
+  Enabled: true # Bật hệ thống phản hồi tự động
+  OnlyInTickets: false # Chỉ phản hồi tự động trong ticket?
+  ConfidenceThreshold: 0.7 # Ngưỡng tương đồng tối thiểu để kích hoạt phản hồi (từ 0.0 đến 1.0)
 
-    "Làm thế nào để tôi cài lại mật khẩu":
-      Message: "Để cài lại mật khẩu, hãy truy cập vào trang khôi phục: https://exampkle.com/reset-password"
-      Type: "TEXT" # EMBED hoặc TEXT
+  Responses: # Tin nhắn mẫu - Phản hồi tương ứng, bạn có thể thêm không giới hạn
+    "What is the server IP": # Khi người dùng hỏi địa chỉ IP
+      Message: "Địa chỉ IP của server là 123.123.123.123. Bạn có thể dùng nó để kết nối!"
+      Type: "EMBED" # Có thể là "EMBED" hoặc "TEXT"
 
-    "Làm thế nào để tôi được hỗ trợ":
-      Message: "Bạn có thể tạo ticket trong server bằng cách dùng lệnh `/ticket` hoặc truy cập trang hỗ trợ: https://example/support"
-      Type: "EMBED" # EMBED hoặc TEXT
+    "How can I reset my password": # Khi người dùng hỏi về reset mật khẩu
+      Message: "Để đặt lại mật khẩu, vui lòng truy cập trang phục hồi: https://example.com/reset-password."
+      Type: "TEXT"
 
-# =================================================================
+    "Where can I get support": # Khi người dùng hỏi cách được hỗ trợ
+      Message: "Bạn có thể tạo ticket trong server bằng cách gõ `/ticket` hoặc truy cập trang hỗ trợ: https://example.com/support."
+      Type: "EMBED"
+
+# ===========================================================================
 # CẤU HÌNH KÊNH THỐNG KÊ
-# =================================================================
-# Toàn bộ các kênh sẽ được tự động cập nhật mỗi 5 phút
+# ===========================================================================
+# Tất cả các kênh này sẽ được cập nhật tự động mỗi 5 phút
 
-TotalTickets:
+TotalTickets: # Tổng số ticket đã tạo
+  Enabled: false # Bật/tắt kênh thống kê này
+  ChannelID: "CHANNEL_ID" # ID của kênh thoại
+  ChannelName: "Tổng Tickets: {total-tickets}" # Biến khả dụng: {total-tickets}
+
+OpenTickets: # Tổng số ticket đang mở
   Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh voice
-  ChannelName: "Tổng ticket: {total-tickets}" # Khả dụng: {total-ticket}
+  ChannelID: "CHANNEL_ID"
+  ChannelName: "Tickets Đang Mở: {open-tickets}" # Biến khả dụng: {open-tickets}
 
-OpenTickets:
+AverageRating: # Xếp hạng trung bình từ các review
   Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh voice
-  ChannelName : "Ticket mở: {open-tickets}" # Khả dụng: {open-tickets}
+  ChannelID: "CHANNEL_ID"
+  ChannelName: "Đánh Giá: ⭐{average-rating}/5.0" # Biến khả dụng: {average-rating}
 
-AverageRating: 
+AverageCompletion: # Thời gian xử lý trung bình (hoàn thành ticket)
   Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh voice
-  ChannelName : "Đánh giá: ⭐{average-rating}/5.0" # Khả dụng: {average-rating}
+  ChannelID: "CHANNEL_ID"
+  ChannelName: "TB Hoàn Thành: {average-completion}" # Biến khả dụng: {average-completion}
 
-AverageCompletion:
+AverageResponse: # Thời gian phản hồi trung bình
   Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh voice
-  ChannelName: "Hoàn thành: {average-completion}" # Khả dụng: {average-completion}
+  ChannelID: "CHANNEL_ID"
+  ChannelName: "TB Phản Hồi: {average-response}" # Biến khả dụng: {average-response}
 
-AverageResponse:
+MemberCount: # Tổng số thành viên trong server
   Enabled: false
-  ChannelID: "ChannelID" # ID của kênh voice
-  ChannelName : "Phản hồi: {average-response}" # Khả dụng: {average-response}
+  ChannelID: "CHANNEL_ID"
+  ChannelName: "Thành Viên: {member-count}" # Biến khả dụng: {member-count}
 
-MemberCount:
-  Enabled: false
-  ChannelID: "CHANNEL_ID" # ID của kênh voice
-  ChannelName: "Thành viên: {member-count}" # Khả dụng {member-count}
-
-# ==================================================================
-# NGÔN NGỮ (LOCALE)
-# ==================================================================
+# ===========================================================================
+# NGÔN NGỮ HIỂN THỊ (LOCALE)
+# ===========================================================================
 Locale:
   NoPermsMessage: "Xin lỗi, bạn không có quyền sử dụng lệnh này!"
   RoleBlacklistedTitle: "Bị Cấm"
-  RoleBlacklistedMsg: "Vai trò của bạn đã bị cấm tạo ticket!"
-  AlreadyOpenTitle: "Đã Mở Ticket"
-  AlreadyOpenMsg: "Bạn chỉ được phép có **{max} ticket** mở cùng lúc." # Sử dụng {max} cho số lượng tối đa ticket mà người dùng được mở cùng lúc
+  RoleBlacklistedMsg: "Vai trò của bạn không được phép tạo ticket!"
+  AlreadyOpenTitle: "Đã Có Ticket"
+  AlreadyOpenMsg: "Bạn chỉ có thể mở tối đa **{max} ticket(s)** cùng lúc." # {max} là số lượng ticket tối đa người dùng được mở cùng lúc
   CloseTicketButton: "Đóng Ticket"
   ticketCreatedTitle: "Đã Tạo Ticket"
-  ticketCreatedMsg : "Ticket của bạn đã được tạo ở"
-  deletingTicketMsg: "Xóa ticket trong {time} giây" # Sử dụng {time} cho số giây trước khi ticket bị xóa
-  PayPalInvoiceMsg: "Vui lòng nhấp vào nút bên dưới để thanh toán!"
+  ticketCreatedMsg : "Ticket của bạn đã được tạo tại"
+  deletingTicketMsg: "Ticket sẽ bị xoá sau {time} giây" # {time} là số giây trước khi ticket bị xoá
+  PayPalInvoiceMsg: "Vui lòng nhấn nút bên dưới để thanh toán!"
   PayPalUser: "Người dùng:"
   PayPalPrice: "Giá:"
   PayPalService: "Dịch vụ:"
-  PayPalPayInvoice: "Thanh toán"
-  PayPalLogTitle: "Lịch sử Ticket | Hóa đơn PayPal"
+  PayPalPayInvoice: "Thanh Toán"
+  PayPalLogTitle: "Lịch Sử Ticket | Hóa Đơn PayPal"
   NotInTicketChannel: "Bạn không đang ở trong kênh ticket!"
-  ticketUserAdd: "Đã thêm **{user} ({username})** vào ticket." # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  ticketUserRemove: "Đã xóa **{user} ({username})** khỏi ticket." # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  ticketRenamed: "Ticket này đã được đổi tên thành **{newName}**!" # Sử dụng {newName} cho tên mới của ticket
-  userAddTitle: "Lịch sử Ticket | Đã Thêm Người Dùng"
-  userRemoveTitle: "Lịch sử Ticket | Đã Xóa Người Dùng"
-  ticketCloseTitle: "Lịch sử Ticket | Đã Đóng Ticket"
-  ticketRenameTitle: "Lịch sử Ticket | Đã Đổi Tên Ticket"
+  ticketUserAdd: "Đã thêm **{user} ({username})** vào ticket." # {user} là @user, {username} là tên có tag
+  ticketUserRemove: "Đã xoá **{user} ({username})** khỏi ticket."
+  ticketRenamed: "Ticket đã được đổi tên thành **{newName}**!" # {newName} là tên mới
+  userAddTitle: "Lịch Sử Ticket | Người Dùng Được Thêm"
+  userRemoveTitle: "Lịch Sử Ticket | Người Dùng Bị Xoá"
+  ticketCloseTitle: "Lịch Sử Ticket | Đã Đóng Ticket"
+  ticketRenameTitle: "Lịch Sử Ticket | Đã Đổi Tên"
   logsExecutor: "Người Thực Hiện"
   logsTicket: "Ticket"
   logsUser: "Người Dùng"
   logsTicketAuthor: "Người Tạo Ticket"
   logsClosedBy: "Đóng bởi"
-  logsDeletedBy: "Xóa bởi"
+  logsDeletedBy: "Xoá bởi"
   restrictTicketClose: "Bạn không được phép đóng ticket này!"
   ticketPinned: "📌 Ticket này đã được ghim!"
-  ticketAlreadyPinned: "Ticket này đã được ghim!"
-  suggestionSubmit: "Gợi ý của bạn đã được gửi, cảm ơn bạn!"
-  suggestionTitle: "Gợi ý"
-  suggestionStatsTitle: "Thống kê Gợi ý"
-  suggestionsTotal: "Tổng số gợi ý:"
-  suggestionsTotalUpvotes: "Tổng số lượt ủng hộ:"
-  suggestionsTotalDownvotes: "Tổng số lượt không ủng hộ:"
-  suggestionInformation: "Thông tin"
-  suggestionUpvotes: "Lượt ủng hộ:"
-  suggestionDownvotes: "Lượt không ủng hộ:"
+  ticketAlreadyPinned: "Ticket này đã được ghim từ trước!"
+  suggestionSubmit: "Góp ý của bạn đã được gửi, cảm ơn bạn!"
+  suggestionTitle: "Góp Ý"
+  suggestionStatsTitle: "Thống Kê Góp Ý"
+  suggestionsTotal: "Tổng Góp Ý:"
+  suggestionsTotalUpvotes: "Tổng Bình Chọn 👍:"
+  suggestionsTotalDownvotes: "Tổng Bình Chọn 👎:"
+  suggestionInformation: "Thông Tin"
+  suggestionUpvotes: "Bình Chọn 👍:"
+  suggestionDownvotes: "Bình Chọn 👎:"
   suggestionFrom: "Từ:"
   suggestionStatus: "Trạng thái:"
-  newSuggestionTitle: "💡 Gợi Ý Mới"
-  suggestionVoteResetTitle: "Đặt Lại Bình Chọn"
-  suggestionVoteReset: "Bình chọn của bạn cho [gợi ý này]({link}) đã được đặt lại!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
+  newSuggestionTitle: "💡 Góp Ý Mới"
+  suggestionVoteResetTitle: "Đã Reset Bình Chọn"
+  suggestionVoteReset: "Bình chọn của bạn cho [góp ý này]({link}) đã được reset!" # {link} là đường dẫn tới góp ý
   suggestionNoVoteTitle: "Chưa Bình Chọn"
-  suggestionNoVote: "Bạn chưa bình chọn cho [gợi ý này]({link})!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  suggestionDownvotedTitle: "Đã Không Ủng Hộ Gợi Ý"
-  suggestionDownvoted: "Bạn đã không ủng hộ [gợi ý này]({link}) thành công!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
+  suggestionNoVote: "Bạn chưa bình chọn cho [góp ý này]({link})!"
+  suggestionDownvotedTitle: "Đã Bỏ Phiếu Không Đồng Ý"
+  suggestionDownvoted: "Bạn đã bỏ phiếu không đồng ý cho [góp ý này]({link})!"
   suggestionAlreadyVotedTitle: "Đã Bình Chọn"
-  suggestionAlreadyVoted: "Bạn đã bình chọn cho [gợi ý này]({link}) rồi! Bạn có thể nhấn nút Đặt Lại Bình Chọn để thay đổi bình chọn." # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  suggestionUpvotedTitle: "Đã Ủng Hộ Gợi Ý"
-  suggestionUpvoted: "Bạn đã ủng hộ [gợi ý này]({link}) thành công!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  suggestionAcceptedTitle: "Đã Chấp Nhận Gợi Ý"
-  suggestionAccepted: "Bạn đã chấp nhận [gợi ý này]({link}) thành công!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  suggestionDeniedTitle: "Đã Từ Chối Gợi Ý"
-  suggestionDenied: "Bạn đã từ chối [gợi ý này]({link}) thành công!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  suggestionNoPerms: "Bạn không được phép chấp nhận hoặc từ chối gợi ý!"
-  suggestionCantVoteTitle: "Không thể bình chọn"
-  suggestionCantVote: "Bạn không thể bình chọn cho [gợi ý này]({link}) vì nó đã được chấp nhận hoặc từ chối!" # Sử dụng {link} cho liên kết tin nhắn gợi ý
-  cryptoTitle: "Thanh Toán Bằng Crypto"
-  cryptoMessage: "Quét mã QR bên dưới hoặc thanh toán đến địa chỉ dưới đây với số tiền chính xác"
-  cryptoLogTitle: "Lịch sử Ticket | Thanh Toán Crypto"
+  suggestionAlreadyVoted: "Bạn đã bình chọn cho [góp ý này]({link})! Bạn có thể nhấn nút Reset Vote để thay đổi bình chọn."
+  suggestionUpvotedTitle: "Đã Bỏ Phiếu Đồng Ý"
+  suggestionUpvoted: "Bạn đã bỏ phiếu đồng ý cho [góp ý này]({link})!"
+  suggestionAcceptedTitle: "Góp Ý Được Chấp Nhận"
+  suggestionAccepted: "Bạn đã chấp nhận [góp ý này]({link}) thành công!"
+  suggestionDeniedTitle: "Góp Ý Bị Từ Chối"
+  suggestionDenied: "Bạn đã từ chối [góp ý này]({link}) thành công!"
+  suggestionNoPerms: "Bạn không có quyền để chấp nhận hoặc từ chối góp ý!"
+  suggestionCantVoteTitle: "Không Thể Bình Chọn"
+  suggestionCantVote: "Bạn không thể bình chọn cho [góp ý này]({link}) vì nó đã được chấp nhận hoặc từ chối!"
+  cryptoTitle: "Thanh Toán Crypto"
+  cryptoMessage: "Quét mã QR bên dưới hoặc thanh toán đến địa chỉ dưới đây với đúng số tiền"
+  cryptoLogTitle: "Lịch Sử Ticket | Thanh Toán Crypto"
   cryptoLogAddress: "Địa chỉ"
   restrictTicketClaim: "Bạn không được phép nhận ticket này!"
-  claimTicketButton: "Nhận"
-  unclaimTicketButton: "Bỏ Nhận"
+  claimTicketButton: "Nhận Ticket"
+  unclaimTicketButton: "Bỏ Nhận Ticket"
   ticketClaimedBy: "Đã nhận bởi"
   ticketUnClaimedBy: "Đã bỏ nhận bởi"
-  ticketClaimedTitle: "Ticket Đã Được Nhận"
-  ticketUnClaimedTitle: "Ticket Đã Bỏ Nhận"
+  ticketClaimedTitle: "Đã Nhận Ticket"
+  ticketUnClaimedTitle: "Đã Bỏ Nhận Ticket"
   ticketNotClaimed: "Ticket này chưa được nhận!"
-  ticketClaimed: "Ticket này đã được nhận bởi {user}\nHọ sẽ hỗ trợ bạn ngay!" # Sử dụng {user} cho người nhận ticket
-  ticketUnClaimed: "Ticket này đã được bỏ nhận bởi {user}" # Sử dụng {user} cho người đã nhận ticket
-  ticketDidntClaim: "Bạn không phải là người đã nhận ticket này, chỉ người nhận mới có thể bỏ nhận! ({user})" # Sử dụng {user} cho người đã nhận ticket
-  ticketClaimedLog: "Lịch sử Ticket | Ticket Đã Nhận"
-  ticketUnClaimedLog: "Lịch sử Ticket | Ticket Đã Bỏ Nhận"
+  ticketClaimed: "Ticket này đã được nhận bởi {user}\nHọ sẽ hỗ trợ bạn ngay!"
+  ticketUnClaimed: "Ticket này đã được bỏ nhận bởi {user}"
+  ticketDidntClaim: "Bạn không phải là người đã nhận ticket này, chỉ người nhận ticket mới có thể bỏ nhận! ({user})"
+  ticketClaimedLog: "Lịch Sử Ticket | Đã Nhận"
+  ticketUnClaimedLog: "Lịch Sử Ticket | Đã Bỏ Nhận"
   claimTicketMsg: "Bạn đã nhận ticket này thành công!"
   unclaimTicketMsg: "Bạn đã bỏ nhận ticket này thành công!"
-  totalMessagesLog: "Tổng số tin nhắn:"
-  totalTickets: "Tổng số ticket:"
-  openTickets: "Ticket đang mở:"
-  totalClaims: "Tổng số lần nhận:"
+  totalMessagesLog: "Tổng Số Tin Nhắn:"
+  totalTickets: "Tổng Ticket:"
+  openTickets: "Ticket Đang Mở:"
+  totalClaims: "Tổng Ticket Được Nhận:"
   guildStatistics: "Thống Kê Máy Chủ"
   statsTickets: "Ticket"
-  alreadyBlacklisted: "{user} đã bị cấm rồi!" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  successfullyBlacklisted: "{user} đã được **cấm** tạo ticket thành công!" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  notBlacklisted: "{user} không bị cấm!" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  successfullyUnblacklisted: "{user} đã được **gỡ cấm** tạo ticket thành công!" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  userBlacklistedTitle: "Bị Cấm"
+  alreadyBlacklisted: "{user} đã bị đưa vào danh sách đen!"
+  successfullyBlacklisted: "{user} đã được **thêm vào danh sách đen** và không thể tạo ticket!"
+  notBlacklisted: "{user} không nằm trong danh sách đen!"
+  successfullyUnblacklisted: "{user} đã được **gỡ khỏi danh sách đen** và có thể tạo ticket!"
+  userBlacklistedTitle: "Danh Sách Đen"
   userBlacklistedMsg: "Bạn đã bị cấm tạo ticket!"
   ticketInformationCloseDM: "• Thông Tin Ticket"
-  categoryCloseDM: "Danh mục:"
-  claimedByCloseDM: "Người nhận:"
+  categoryCloseDM: "Danh Mục:"
+  claimedByCloseDM: "Được nhận bởi:"
   ticketClosedCloseDM: "Ticket Đã Đóng"
   notClaimedCloseDM: "Chưa được nhận"
   ticketRating: "Đánh Giá Ticket"
-  totalReviews: "Tổng số đánh giá:"
-  averageRating: "Đánh giá trung bình:"
-  cooldownEmbedMsgTitle: "Chờ Đợi"
-  cooldownEmbedMsg: "Bạn cần đợi {time} trước khi tạo ticket tiếp theo!" # Sử dụng {time} để hiển thị thời gian chờ
+  totalReviews: "Tổng Đánh Giá:"
+  averageRating: "Đánh Giá Trung Bình:"
+  cooldownEmbedMsgTitle: "Thời Gian Chờ"
+  cooldownEmbedMsg: "Bạn cần chờ {time} trước khi có thể tạo ticket mới!" # {time} là thời gian còn lại
   selectCategory: "Chọn danh mục..."
-  selectReview: "Chọn đánh giá..."
-  explainWhyRating: "Vui lòng giải thích lý do bạn đánh giá như vậy"
+  selectReview: "Chọn mức đánh giá..."
+  explainWhyRating: "Vui lòng giải thích lý do bạn đưa ra mức đánh giá này"
   ratingsStats: "Đánh Giá"
   cryptoQRCode: "Mã QR"
   userLeftTitle: "Người Dùng Đã Rời"
-  userLeftDescription: "Người tạo ticket đã rời máy chủ **({username})**" # Sử dụng {username} cho Ví_dụ#0000
+  userLeftDescription: "Người đã tạo ticket này đã rời khỏi máy chủ **({username})**" # {username} là tên người dùng
   reOpenButton: "Mở Lại"
-  transcriptButton: "Bản Ghi"
-  deleteTicketButton: "Xóa"
-  ticketClosedBy: "Ticket này đã được đóng bởi {user} ({username})" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  ticketReOpenedBy: "Ticket này đã được mở lại bởi {user} ({username})" # Sử dụng {user} cho @Ví_dụ và {username} cho Ví_dụ#0000
-  ticketTranscriptCategory: "Danh mục"
-  ticketTranscript: "Bản Ghi Ticket"
+  transcriptButton: "Sao Lưu"
+  deleteTicketButton: "Xoá"
+  ticketClosedBy: "Ticket này đã được đóng bởi {user} ({username})"
+  ticketReOpenedBy: "Ticket này đã được mở lại bởi {user} ({username})"
+  ticketTranscriptCategory: "Danh Mục"
+  ticketTranscript: "Sao Lưu Ticket"
   ticketName: "Tên Ticket"
-  transcriptSaved: "Bản ghi đã được lưu vào {channel}" # Sử dụng {channel} cho kênh đã lưu
-  transcriptSavedBy: "Lưu bởi {user}" # Sử dụng {user} cho người đã lưu bản ghi
-  notAllowedTranscript: "Bạn không được phép tạo bản ghi!"
-  notAllowedDelete: "Bạn không được phép xóa ticket này!"
-  StripeInvoiceTitle: "Hóa đơn Stripe"
-  StripeLogTitle: "Lịch sử Ticket | Hóa đơn Stripe"
-  ticketForceDeleted: "Ticket Bị Xóa Vĩnh Viễn"
+  transcriptSaved: "Đã lưu bản sao cuộc trò chuyện vào {channel}" # {channel} là kênh đã lưu
+  transcriptSavedBy: "Được lưu bởi {user}" # {user} là người đã lưu
+  notAllowedTranscript: "Bạn không có quyền tạo bản sao cuộc trò chuyện!"
+  notAllowedDelete: "Bạn không có quyền xoá ticket này!"
+  StripeInvoiceTitle: "Hoá Đơn Stripe"
+  StripeLogTitle: "Lịch Sử Ticket | Hoá Đơn Stripe"
+  ticketForceDeleted: "Ticket Đã Bị Xoá Ép"
   reason: "Lý do"
-  ticketClosedByReason: "Ticket này đã được đóng bởi {user} ({username})\n\n**Lý do:**\n{reason}" # Sử dụng {user} và {reason}
+  ticketClosedByReason: "Ticket này đã được đóng bởi {user} ({username})\n\n**Lý do:**\n{reason}"
   successReason: "Đã đặt lý do đóng ticket thành công!"
-  requiredRoleMissing: "Bạn không có vai trò yêu cầu để mở ticket trong danh mục này!"
-  requiredRoleTitle: "Yêu Cầu Vai Trò"
+  requiredRoleMissing: "Bạn không có vai trò cần thiết để mở ticket trong danh mục này!"
+  requiredRoleTitle: "Cần Vai Trò"
   notAnswered: "Chưa trả lời"
-  answeringQuestionsSuccess: "Cảm ơn bạn đã trả lời câu hỏi!"
-  dmTranscriptField: "• Bản Ghi"
+  answeringQuestionsSuccess: "Cảm ơn bạn đã trả lời các câu hỏi!"
+  dmTranscriptField: "• Bản sao cuộc trò chuyện"
   dmTranscriptClickhere: "Nhấn vào đây"
-  viewTranscriptButton: "Xem Bản Ghi"
-  averageCompletionTime: "Thời gian hoàn thành trung bình:"
+  viewTranscriptButton: "Xem Bản Sao"
+  averageCompletionTime: "Thời gian hoàn tất trung bình:"
   averageResponseTime: "Thời gian phản hồi trung bình:"
-  whyCloseTicket: "Tại sao bạn muốn đóng ticket này?"
+  whyCloseTicket: "Vì sao bạn muốn đóng ticket này?"
   ticketCloseReasonTitle: "Lý Do Đóng Ticket"
 
-# ====================================================================
-# LỆNH HỖ TRỢ
-# ====================================================================
+# ===========================================================================  
+# LỆNH TRỢ GIÚP  
+# ===========================================================================
 HelpCommand:
-  EmbedColor: "" # Mã màu hex, để trống để sử dụng mặc định
-  FooterTimestamp: true # Bật gửi kèm thời gian trong footer?
-  GuildIcon: true # Hiện server icon ở embed thumbnail
-  Title: "{botname} lệnh" # Sử dụng {botName} cho tên của bot, Đây là tên bạn cài ở trên đầu của file
+  EmbedColor: "" # Mã màu hex, để trống để sử dụng màu mặc định
+  FooterTimestamp: true # Hiển thị thời gian gửi tin nhắn ở chân trang?
+  GuildIcon: true # Hiển thị biểu tượng của máy chủ dưới dạng thumbnail trong embed?
+  Title: "Danh sách lệnh của {botName}" # Dùng {botName} để hiển thị tên bot
   GeneralCategory:
-    Name: "👤 | Chung —" # Tên danh mục cho lệnh general
-    ShowCount: true # Hiện tổng lệnh cho danh mục
+    Name: "👤 | Chung —" # Tên danh mục cho các lệnh chung
+    ShowCount: true # Hiển thị số lượng lệnh trong danh mục chung?
   TicketCategory:
-    name: "🎫 | Ticket —" # Tên danh mục cho lệnh ticket
-    ShowCount: true # Hiện tổng lệnh cho danh mục
-  Utilitycategory:
-    name: "🛠️ | Cần thiết —" # Tên danh mục cho lệnh utility
-    ShowCount: true # Hiện tổng lệnh cho danh mục
-  FooterMsg: "{guildName}" # Bạn có thể su dụng {guildname} và {userTag}
-  FooterIcon: "" # Ảnh của footer, để trống nếu không có icon
+    Name: "🎫 | Ticket —" # Tên danh mục cho các lệnh ticket
+    ShowCount: true # Hiển thị số lượng lệnh trong danh mục ticket?
+  UtilityCategory:
+    Name: "🛠️ | Tiện ích —" # Tên danh mục cho các lệnh tiện ích
+    ShowCount: true # Hiển thị số lượng lệnh trong danh mục tiện ích?
+  FooterMsg: "{guildName}" # Bạn có thể dùng {guildName} và {userTag}
+  FooterIcon: "" # Hình ảnh dưới chân trang, để trống nếu không muốn hiển thị
 
-# =====================================================================
-# CUSTOM NÚT
-# =====================================================================
+# ===========================================================================  
+# TUỲ CHỈNH NÚT BẤM  
+# ===========================================================================
+
 ButtonEmojis:
-  deleteTicket: "⛔"
-  reOpenTicket: "🔓"
-  createTranscript: "📜"
-  closeTicket: "🔒"
-  ticketCreated: "🎫"
-  ticketClaim: "👋"
+  deleteTicket: "⛔"              # Xoá ticket
+  reOpenTicket: "🔓"             # Mở lại ticket
+  createTranscript: "📜"         # Tạo bản ghi (transcript)
+  closeTicket: "🔒"              # Đóng ticket
+  ticketCreated: "🎫"            # Ticket đã được tạo
+  ticketClaim: "👋"              # Nhận xử lý ticket
 
-# Màu hỗ trợ
-# Primary = blurple
-# Secondary = gray
-# Success = green
-# Danger = red
+# Màu hợp lệ:
+# Primary = xanh dương nhạt (blurple)
+# Secondary = xám
+# Success = xanh lá
+# Danger = đỏ
 
 ButtonColors:
-  deleteTicket: "Secondary"
-  reOpenTicket: "Secondary"
-  createTranscript: "Secondary"
-  closeTicket: "Danger"
-  ticketClaim: "Success"
-  ticketUnclaim: "Primary"
-  ticketConfirmClosure: "Success"
-  ticketCancelClosure: "Danger"
+  deleteTicket: "Secondary"          # Màu nút xoá ticket
+  reOpenTicket: "Secondary"          # Màu nút mở lại ticket
+  createTranscript: "Secondary"      # Màu nút tạo transcript
+  closeTicket: "Danger"              # Màu nút đóng ticket
+  ticketClaim: "Success"             # Màu nút nhận ticket
+  ticketUnclaim: "Primary"           # Màu nút bỏ nhận ticket
+  ticketConfirmClosure: "Success"    # Màu nút xác nhận đóng ticket
+  ticketCancelClosure: "Danger"      # Màu nút huỷ đóng ticket
 
-# ======================================================================
-# CẤU HÌNH DATABASE
-# ======================================================================
+# ===========================================================================  
+# CẤU HÌNH CƠ SỞ DỮ LIỆU  
+# ===========================================================================
 
-# Bot có nên tự động dọn dẹp database nếu nó quá lớn? (Xóa các tài liệu, dữ liệu không dùng khỏi database)
+# Bot có nên tự động dọn dẹp dữ liệu trong cơ sở dữ liệu để tránh quá tải không?
+# (Xoá các tài liệu/dữ liệu không còn sử dụng trong database)
+
 cleanUpData:
-  tickets: # Điều này sẽ áp dụng với các bản ghi ticket cũ
-    enabled: false
-    time: 12 # Số tháng tối đa trước khi bị xóa
-  reviews: # Điều này sẽ không gây ảnh hưởng với tỉ lệ hoàn thành
-    enabled: false
-    time: 12 # Số tháng tối đa trước khi bị xóa
+  tickets: # Lưu ý: điều này có thể ảnh hưởng đến các bản ghi (transcript) ticket cũ
+    enabled: false # Bật/Tắt dọn dẹp dữ liệu ticket
+    time: 12       # Tuổi tối đa (tính theo tháng) trước khi bị xoá
+
+  reviews: # Việc này sẽ không ảnh hưởng đến đánh giá trung bình
+    enabled: false # Bật/Tắt dọn dẹp dữ liệu đánh giá
+    time: 12       # Tuổi tối đa (tính theo tháng) trước khi bị xoá

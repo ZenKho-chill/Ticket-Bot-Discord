@@ -1,25 +1,27 @@
-const { Discord, EmbedBuilder } = require('discord.js');
+const { Discord, EmbedBuilder } = require("discord.js");
 const fs = require('fs');
-const yaml = require('js-yaml')
+const yaml = require("js-yaml")
 const config = yaml.load(fs.readFileSync('./config.yml', 'utf8'))
 const color = require('ansi-colors');
-const utils = require('../utils.js')
-const ticketModel = require('../models/ticketModel.js')
-const guildModel = require('../models/guildModel.js')
+const utils = require("../utils.js");
+const ticketModel = require("../models/ticketModel");
+const guildModel = require("../models/guildModel");
 
 module.exports = async (client, message) => {
   if (!message.channel.type === 0) return;
   const ticketDB = await ticketModel.findOne({ channelID: message.channel.id });
   if (message.author.bot) return;
 
-  // WIP: Lưu trữ tất cả người dùng hỗ trợ trong DB userStats để có được số liệu thống kê người dùng cụ thể
+  // TODO: Lưu tất cả người hỗ trợ vào cơ sở dữ liệu userStats, để theo dõi thống kê riêng từng người
   // let supportRole = utils.checkIfUserHasSupportRoles(message)
   // if(supportRole) {
+  //
   // }
 
-  // Lệnh custom
+  // Các lệnh tùy chỉnh
   if (config.CommandsEnabled) {
     config.CustomCommands.forEach(cmd => {
+
       let messageArray = message.content.split(" ");
       let command = messageArray[0].toLowerCase();
       messageArray.slice(1);
@@ -32,7 +34,7 @@ module.exports = async (client, message) => {
           if (e) console.log(e);
         });
 
-        if (config.LogCommands) console.log(`${color.yellow(`[CUSTOM COMMAND] ${color.cyan(`${message.author.username}`)} sử dụng ${color.cyan(`${config.CommandsPrefix}${cmd.command}`)}`)}`);
+        if (config.LogCommands) console.log(`${color.yellow(`[CUSTOM COMMAND] ${color.cyan(`${message.author.username}`)} đã dùng ${color.cyan(`${config.CommandsPrefix}${cmd.command}`)}`)}`);
 
         let respEmbed = new EmbedBuilder()
           .setColor(config.EmbedColors)
@@ -48,22 +50,23 @@ module.exports = async (client, message) => {
     })
   }
 
-  // Đếm tin nhắn trong ticket và cập nhật lastMessageSent, check nếu lệnh alert đang kích hoạt
+  // Đếm số tin nhắn trong ticket, cập nhật thời gian gửi cuối, và kiểm tra lệnh cảnh báo có đang hoạt động không
   if (ticketDB) {
-    // Tăng tin nhắn trong ticket
+    // Tăng số lượng tin nhắn trong ticket
     if (!message.author.bot) {
       let supportRole = await utils.checkIfUserHasSupportRoles(message);
 
-      // Xác định ai đang trả lời
-      const waitingReplyFrom = supportRole? "user" : "staff";
+      // Xác định người cần phản hồi tiếp theo
+      const waitingReplyFrom = supportRole ? "user" : "staff";
 
-      // Kiểm tra xem phản hồi đầu tiên có phải từ staff không
+      // Kiểm tra đây có phải phản hồi đầu tiên từ nhân viên hỗ trợ không
       if (supportRole && !ticketDB.firstStaffResponse) {
         await ticketModel.findOneAndUpdate(
           { channelID: message.channel.id },
           { $set: { firstStaffResponse: Date.now() } }
         );
       }
+
       await ticketModel.findOneAndUpdate(
         { channelID: message.channel.id },
         {
@@ -71,18 +74,19 @@ module.exports = async (client, message) => {
             lastMessageSent: Date.now(),
             waitingReplyFrom: waitingReplyFrom,
           },
-          $inc: { message: 1 },
+          $inc: { messages: 1 },
         },
         { new: true }
       );
     }
-    // Tăng totalMessages trong bộ đếm
+
+    // Tăng tổng số tin nhắn trong thống kê toàn server
     await guildModel.findOneAndUpdate(
       { guildID: message.guild.id },
       { $inc: { totalMessages: 1 } }
     );
 
-    // Cảnh báo tự động đóng, kiểm tra phản hồi
+    // Kiểm tra xem ticket có đang chờ đóng do cảnh báo không
     if (config.TicketAlert.Enabled) {
       const filtered = await ticketModel.find({
         closeNotificationTime: { $exists: true, $ne: null },
@@ -93,57 +97,60 @@ module.exports = async (client, message) => {
         if (!time) return;
         if (!time.channelID) return;
         if (time.closeNotificationTime === 0) return
+
         if (time.channelID === message.channel.id) {
-          // Đặt lại closeNotificationTime
+          // Đặt lại thời gian cảnh báo
           await ticketModel.findOneAndUpdate(
             { channelID: message.channel.id },
             { $unset: { closeReason: 1 }, $set: { closeNotificationTime: 0 } }
           );
 
-          // Xóa tin nhắn thông báo
+          // Xoá tin nhắn cảnh báo
           if (message) await message.channel.messages.fetch(time.closeNotificationMsgID).then(msg => {
             try {
               msg.delete();
             } catch (error) {
-              console.error('Lỗi xóa tin nhắn:', error);
+              console.error("Lỗi khi xoá tin nhắn:", error);
             }
           });
         }
       }
     }
   }
-  const stringSimilarity = require('string-similarity');
 
+  const stringSimilarity = require("string-similarity");
+
+  // Phản hồi tự động
   if (config.AutoResponse.Enabled && config.AutoResponse.Responses) {
-    // Giới hạn ticket nếu OnlyInTickets là true
+    // Nếu được cấu hình chỉ phản hồi trong ticket, mà không phải ticket thì bỏ qua
     if (config.AutoResponse.OnlyInTickets && !ticketDB) {
       return;
     }
 
-    // Trích xuất tin nhắn của người dùng và phản hồi được cấu hình
+    // Trích xuất tin nhắn người dùng và các phản hồi đã cấu hình
     const userMessage = message.content.toLowerCase();
     const responseKeys = Object.keys(config.AutoResponse.Responses);
 
-    // Tìm lựa chọn giống nhất với tin nhắn người dùng
+    // Tìm phản hồi khớp nhất
     const matches = stringSimilarity.findBestMatch(userMessage, responseKeys);
-    //console.log(`[DEBUG] Best match for "${userMessage}":`, matches.bestMatch);
+    //console.log(`[DEBUG] Kết quả khớp tốt nhất cho "${userMessage}":`, matches.bestMatch);
 
-    // Kiểm tra tin nhắn có đạt yêu cầu tối thiếu hay không
+    // Kiểm tra mức độ khớp có đủ cao không
     if (matches.bestMatch.rating >= config.AutoResponse.ConfidenceThreshold) {
       const matchedKey = matches.bestMatch.target;
       const responseConfig = config.AutoResponse.Responses[matchedKey];
 
       if (!responseConfig || !responseConfig.Message) {
-        console.log(`[INFO] Cấu hình tự động phản hồi thiếu cho: ${matchedKey}`);
+        console.log(`[INFO] Thiếu cấu hình phản hồi cho từ khoá: ${matchedKey}`);
         return;
       }
 
       const responseMsg = responseConfig.Message;
-      const responseType = responseConfig.Type || "TEXT"; // Mặc định là text
+      const responseType = responseConfig.Type || "TEXT"; // Mặc định là TEXT nếu không có
 
-      // Trả lời bằng embed hoặc text
+      // Gửi phản hồi dạng EMBED hoặc TEXT
       if (responseType === "EMBED") {
-        const respEmbed = new Embed()
+        const respEmbed = new EmbedBuilder()
           .setColor(config.EmbedColors)
           .setDescription(`<@!${message.author.id}>, ${responseMsg}`)
           .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
@@ -153,10 +160,10 @@ module.exports = async (client, message) => {
       } else if (responseType === "TEXT") {
         message.reply({ content: `<@!${message.author.id}>, ${responseMsg}` });
       } else {
-        console.log(`[INFO] Sai định dạng trả lời cho: ${matchedKey}. Chỉ được "EMBED" hoặc "TEXT".`);
+        console.log(`[INFO] Loại phản hồi không hợp lệ cho từ khoá: ${matchedKey}. Phải là "EMBED" hoặc "TEXT".`);
       }
     } else {
-      console.log(`[INFO] Không có câu trả lời cho: "${userMessage}". Độ phù hợp: ${matches.bestMatch.rating}`);
+      //console.log(`[INFO] Không tìm thấy phản hồi phù hợp cho: "${userMessage}". Mức độ khớp: ${matches.bestMatch.rating}`);
     }
   }
 };

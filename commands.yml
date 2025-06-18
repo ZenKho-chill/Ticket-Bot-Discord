@@ -1,70 +1,67 @@
 # ===========================================================================
 # CÁC LỆNH CHUNG
 # ===========================================================================
-
 General:
   Help: # Lệnh trợ giúp
     Enabled: true
     Description: "Hiển thị danh sách tất cả các lệnh"
-  Ping: # Lệnh ping
-    Enabled: true
+  Ping: # Lệnh kiểm tra độ trễ
+    Enabled: false
     Description: "Kiểm tra độ trễ (ping) của bot"
   Stats: # Lệnh thống kê
     Enabled: true
     Description: "Thống kê máy chủ"
-  Suggest: # Lệnh đề xuất
+  Suggest: # Lệnh gửi đề xuất
     Enabled: true
     Description: "Gửi một đề xuất"
 
 # ===========================================================================
-# CÁC LỆNH VỀ PHIẾU HỖ TRỢ (TICKET)
+# CÁC LỆNH VỀ TICKET
 # ===========================================================================
-
 Ticket:
-  Add: # Lệnh thêm người dùng
+  Add: # Lệnh thêm người dùng vào ticket
     Enabled: true
-    Description: "Thêm người dùng vào phiếu hỗ trợ"
-    AllowEveryoneToUse: true # Nếu đặt thành false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
-  Remove: # Lệnh xóa người dùng
+    Description: "Thêm người dùng vào ticket"
+    AllowEveryoneToUse: true # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+  Remove: # Lệnh xoá người dùng khỏi ticket
     Enabled: true
-    Description: "Xóa người dùng khỏi phiếu hỗ trợ"
-    AllowEveryoneToUse: true # Nếu đặt thành false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
-  Close: # Lệnh đóng phiếu
+    Description: "Xoá người dùng khỏi ticket"
+    AllowEveryoneToUse: true # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+  Close: # Lệnh đóng ticket
     Enabled: true
-    Description: "Đóng một phiếu hỗ trợ"
-  Delete: # Lệnh xóa phiếu
+    Description: "Đóng một ticket"
+  Delete: # Lệnh xoá ticket ngay lập tức
     Enabled: true
-    Description: "Xóa ngay lập tức một phiếu hỗ trợ"
-  Panel: # Lệnh bảng điều khiển
+    Description: "Buộc xoá và xoá ngay lập tức một ticket"
+  Panel: # Lệnh gửi bảng chọn ticket
     Enabled: true
-    Description: "Gửi bảng điều khiển phiếu hỗ trợ"
-  Pin: # Lệnh ghim
+    Description: "Gửi bảng chọn ticket"
+  Pin: # Lệnh ghim ticket
     Enabled: true
-    Description: "Ghim một phiếu hỗ trợ"
-  Rename: # Lệnh đổi tên
+    Description: "Ghim một ticket"
+  Rename: # Lệnh đổi tên ticket
     Enabled: true
-    Description: "Đổi tên phiếu hỗ trợ"
-  Alert: # Lệnh cảnh báo
+    Description: "Đổi tên ticket"
+  Alert: # Lệnh cảnh báo sẽ đóng ticket
     Enabled: true
-    Description: "Gửi ping đến người tạo với thông báo rằng phiếu sẽ bị đóng nếu không có phản hồi"
-  Priority: # Lệnh độ ưu tiên
+    Description: "Tag người tạo và thông báo rằng ticket sẽ bị đóng nếu không có phản hồi"
+  Priority: # Lệnh quản lý mức ưu tiên
     Enabled: true
-    Description: "Quản lý mức độ ưu tiên của phiếu hỗ trợ"
+    Description: "Quản lý mức độ ưu tiên của ticket"
 
 # ===========================================================================
-# CÁC LỆNH TIỆN ÍCH
+# CÁC LỆNH HỖ TRỢ TIỆN ÍCH
 # ===========================================================================
-
 Utility:
-  Blacklist: # Lệnh chặn người dùng
+  Blacklist: # Lệnh quản lý danh sách đen
     Enabled: true
-    Description: "Quản lý danh sách người dùng bị chặn"
+    Description: "Quản lý danh sách đen người dùng"
   Calculate: # Lệnh tính toán
-    Enabled: true
+    Enabled: false
     Description: "Máy tính toán học"
-  Crypto: # Lệnh thanh toán tiền ảo
-    Enabled: true
-    Description: "Gửi một khoản thanh toán bằng tiền điện tử"
-  Invoice: # Lệnh hóa đơn
-    Enabled: true
-    Description: "Gửi hóa đơn đến người dùng"
+  Crypto: # Lệnh thanh toán tiền mã hoá
+    Enabled: false
+    Description: "Gửi thanh toán bằng tiền mã hoá"
+  Invoice: # Lệnh gửi hoá đơn
+    Enabled: false
+    Description: "Gửi hoá đơn cho người dùng"

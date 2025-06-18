@@ -28,7 +28,7 @@ module.exports = {
       return interaction.editReply({ content: config.Locale.restrictTicketClose, ephemeral: true });
     }
 
-    let closeReason = interaction.options.getString('reason') || "Không có lý do";
+    let closeReason = interaction.options.getString('reason') || "Không có lý do được cung cấp";
 
     await ticketModel.updateOne(
       { channelID: interaction.channel.id },
@@ -40,6 +40,9 @@ module.exports = {
         }
       }
     );
+
     await client.emit('ticketClose', interaction);
+
   }
+
 }

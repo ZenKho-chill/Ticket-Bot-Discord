@@ -1,54 +1,56 @@
 if (process.platform !== "win32") require("child_process").exec("npm install");
 
+
 const color = require('ansi-colors');
 const axios = require('axios');
-console.log(`${color.yellow(`Khởi động bot, có thể mất chút thời gian...`)}`);
+console.log(`${color.yellow(`Starting bot, this can take a while..`)}`);
 const fs = require('fs');
 
 const version = Number(process.version.split('.')[0].replace('v', ''));
 if (version < 18) {
-  console.log(`${color.red(`[ERROR] ZenKho Ticket Bot yêu cầu NodeJS 18 hoặc cao hơn!\nBạn có thể kiểm tra phiên bản NodeJS bằng lệnh "node -v" trong terminal.`)}`);
+  console.log(`${color.red(`[ERROR] Plex Tickets requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
 
-  console.log(`${color.blue(`\n[INFO] Để cập nhật Node.js, làm theo hướng dẫn sau trong:`)}`);
-  console.log(`${color.green(`- Windows:`)} Tải và chạy phần mềm từ ${color.cyan(`https:/nodejs.org/`)}`);
-  console.log(`${color.green(`- Ubuntu/Debian:`)} Chạy lệnh ở dưới trong Terminal:`);
-  console.log(`${color.cyan(`   - sudo apt update`)}`);
-  console.log(`${color.cyan(`   - sudo apt upgrade nodejs`)}`);
-  console.log(`${color.green(`- CentOS:`)} Chạy lệnh ở dưới trên Terminal:`);
-  console.log(`${color.cyan(`   - sudo yum update`)}`);
-  console.log(`${color.cyan(`   -sudo yum install -y nodejs`)}`);
+  console.log(`${color.blue(`\n[INFO] To update Node.js, follow the instructions below for your operating system:`)}`);
+  console.log(`${color.green(`- Windows:`)} Download and run the installer from ${color.cyan(`https://nodejs.org/`)}`);
+  console.log(`${color.green(`- Ubuntu/Debian:`)} Run the following commands in the Terminal:`);
+  console.log(`${color.cyan(`  - sudo apt update`)}`);
+  console.log(`${color.cyan(`  - sudo apt upgrade nodejs`)}`);
+  console.log(`${color.green(`- CentOS:`)} Run the following commands in the Terminal:`);
+  console.log(`${color.cyan(`  - sudo yum update`)}`);
+  console.log(`${color.cyan(`  - sudo yum install -y nodejs`)}`);
 
-  let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] ZenKho Ticket Bot yêu cầu NodeJS 18 hoặc cao hơn!`;
-  fs.appendFile("./logs.txt", logMsg, (e) => {
-    if (e) console.log(e);
+  let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] Plex Tickets requires a NodeJS version of 18 or higher!`;
+  fs.appendFile("./logs.txt", logMsg, (e) => { 
+    if(e) console.log(e);
   });
+
   process.exit()
 }
 
 const packageFile = require('./package.json');
-let logMsg = `\n\n[${new Date().toLocaleString()}] [STARTING] Thử khởi động bot..\nPhiên bản NodeJS: ${process.version}\nPhiên bản bot: ${packageFile.version}`;
-fs.appendFile("./logs.txt", logMsg, (e) => {
+let logMsg = `\n\n[${new Date().toLocaleString()}] [STARTING] Attempting to start the bot..\nNodeJS Version: ${process.version}\nBot Version: ${packageFile.version}`;
+fs.appendFile("./logs.txt", logMsg, (e) => { 
   if(e) console.log(e);
 });
 
 const { Collection, Client, Discord, ActionRowBuilder, ButtonBuilder, GatewayIntentBits, ActivityType } = require('discord.js');
-const yaml = require('js-yaml');
-const client = new Client({
+const yaml = require("js-yaml")
+const client = new Client({ 
   restRequestTimeout: 60000,
   intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.Guilds, 
+    GatewayIntentBits.GuildMessages, 
+    GatewayIntentBits.GuildMembers, 
+    GatewayIntentBits.GuildPresences, 
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildInvites,
     GatewayIntentBits.GuildMessageReactions
   ],
-  prosence: {
+  presence: {
     status: 'dnd',
-    activities: [{ name: 'Khởi động...', type: ActivityType.Playing }]
+    activities: [{ name: 'Starting up...', type: ActivityType.Playing }]
   },
   retryLimit: 3
 });
@@ -56,36 +58,36 @@ const client = new Client({
 let config = ""
 try {
   config = yaml.load(fs.readFileSync('./config.yml', 'utf8'))
-} catch (e) {
-  if (e instanceof yaml.YAMLException) {
-    console.error(color.red('Đã có lỗi ở trong file config.yml'), e.message);
-    console.error(``);
-    console.error(color.yellow(`Vị trí lỗi: Dòng ${e.mark.line + 1}, Cột ${e.mark.column + 1}`));
-    console.error(``);
+  } catch (e) {
+    if (e instanceof yaml.YAMLException) {
+      console.error(color.red('An error was found in your config.yml file'), e.message);
+      console.error(``);
+      console.error(color.yellow(`Error position: Line ${e.mark.line + 1}, Column ${e.mark.column + 1}`));
+      console.error(``);
 
-    console.error(color.red('THÔNG TIN QUAN TRỌNG:'));
-    console.error(color.yellow('Các tệp YAML có quy định nghiêm ngặt về cách sắp xếp và định vị văn bản'))
-    console.error(color.yellow('Đảm bảo mỗi dòng được căn chỉnh chính xác.'));
-    console.error(color.yellow('Sử dụng khoảng cách để thụt lề và giữ cho chúng thống nhất.'));
-    console.error(color.yellow('Kiểm tra xem mỗi phần có bắt đầu bằng đúng số khoảng trắng hay không.'));
-    console.error(color.yellow('Thông báo ở trên sẽ hiển thị phần không được định dạng đúng và vị trí.'));
-  } else {
-    console.error(color.red('Lỗi đọc file cấu hình:'), e.message);
+      console.error(color.red('IMPORTANT INFORMATION:'));
+      console.error(color.yellow('YAML files are strict about how text is spaced and positioned.'));
+      console.error(color.yellow('Make sure every line is correctly lined up.'));
+      console.error(color.yellow('Use spaces for indentation and keep them consistent.'));
+      console.error(color.yellow('Check that each section starts with the right number of spaces.'));
+      console.error(color.yellow('The message above should display the part that is not formatted properly, and the location.'));
+    } else {
+      console.error(color.red('Error reading configuration file:'), e.message);
+    }
+    process.exit(1); 
   }
-  process.exit(1);
-}
 
 module.exports = client
 require("./utils.js");
 
 const utils = require("./utils.js");
-const { error } = require("console");
 const createTranscriptFolder = async () => {
   let dashboardExists = await utils.checkDashboard();
-  if (config.TicketTranscriptSettings.SaveInFolder && !dashboardExists && !fs.existsSync('./transcripts')) fs.mkdirSync('./transcripts');
-  if (dashboardExists && !fs.existsSync('./addons/Dashboard/transcripts')) fs.mkdirSync('./addons/Dashboard/transcripts');
+  if(config.TicketTranscriptSettings.SaveInFolder && !dashboardExists && !fs.existsSync('./transcripts')) fs.mkdirSync('./transcripts');
+  if(dashboardExists && !fs.existsSync('./addons/Dashboard/transcripts')) fs.mkdirSync('./addons/Dashboard/transcripts');
 };
 createTranscriptFolder()
+
 
 async function uploadToHaste(textToUpload) {
   try {
@@ -93,10 +95,10 @@ async function uploadToHaste(textToUpload) {
     return response.data.key;
   } catch (error) {
     if (error.response) {
-      console.error('Lỗi khi upload lên Haste. Trạng thái:', error.response.status);
-      console.error('Dữ liệu trả về:', error.response.data);
+      console.error('Error uploading to Haste-server. Status:', error.response.status);
+      console.error('Response data:', error.response.data);
     } else {
-      console.error('Lỗi khi upload lên Haste:', error.message);
+      console.error('Error uploading to Haste-server:', error.message);
     }
     return null;
   }
@@ -105,10 +107,10 @@ async function uploadToHaste(textToUpload) {
 const filePath = './logs.txt';
 const maxLength = 300;
 
-async function handleAndUploadError(erroType, error) {
+async function handleAndUploadError(errorType, error) {
   console.log(error);
 
-  const errorPrefix = `[${new Date().toLocaleString()}] [${erroType}] [v${packageFile.version}]`;
+  const errorPrefix = `[${new Date().toLocaleString()}] [${errorType}] [v${packageFile.version}]`;
   const errorMsg = `\n\n${errorPrefix}\n${error.stack}`;
   fs.appendFile("./logs.txt", errorMsg, (e) => {
     if (e) console.log(e);
@@ -116,7 +118,7 @@ async function handleAndUploadError(erroType, error) {
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
-      console.error('Lỗi khi đọc file:', err.message);
+      console.error('Error reading file:', err.message);
       return;
     }
 
@@ -126,9 +128,9 @@ async function handleAndUploadError(erroType, error) {
     uploadToHaste(truncatedContent).then(key => {
       if (key) {
         const hasteURL = `https://paste.plexdevelopment.net/${key}`;
-        console.log(`${color.green.bold(`[${packageFile.version}]`)} ${color.red(`Nếu bạn cần hỗ trợ, hãy tạo một phiếu trên máy chủ Discord của chúng tôi và chia sẻ liên kết này:`)} ${color.yellow(hasteURL)}\n\n`);
+        console.log(`${color.green.bold(`[v${packageFile.version}]`)} ${color.red(`If you require assistance, create a ticket in our Discord server and share this link:`)} ${color.yellow(hasteURL)}\n\n`);
       } else {
-        console.log('Dán và upload thất bại.');
+        console.log('Paste Upload failed.');
       }
     });
   });

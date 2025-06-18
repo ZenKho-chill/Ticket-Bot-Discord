@@ -5,25 +5,24 @@ const yaml = require("js-yaml");
 const config = yaml.load(fs.readFileSync('./config.yml', 'utf8'));
 const commands = yaml.load(fs.readFileSync('./commands.yml', 'utf8'));
 const utils = require("../../utils.js");
-const { enabled } = require('../contextMenu/suggestAccept.js');
 
 module.exports = {
   enabled: commands.General.Help.Enabled,
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription(commands.General.Help.Description),
-  async execute (interaction) {
+  async execute(interaction) {
     await interaction.deferReply();
 
     let icon = interaction.guild.iconURL();
     let helpEmbed = new Discord.EmbedBuilder()
       .setTitle(`${config.HelpCommand.Title.replace(/{botName}/g, `${config.BotName}`)}`)
-      .setColor(config.HelpCommand.EmbdedColor || config.EmbdedColors);
+      .setColor(config.HelpCommand.EmbedColor || config.EmbedColors);
 
     const addCommandFields = (categoryConfig, category, commandList) => {
-      const enabledCommands = commandList.filer(cmd => cmd.Enabled);
+      const enabledCommands = commandList.filter(cmd => cmd.Enabled);
       if (enabledCommands.length > 0) {
-        const commandNames = enabledCommands.map(cmd => cmd.Enabled);
+        const commandNames = enabledCommands.map(cmd => `\`${cmd.Name}\``).join(', ');
         let categoryName = categoryConfig.Name;
         if (categoryConfig.ShowCount) {
           categoryName += ` (${enabledCommands.length})`;
@@ -34,9 +33,10 @@ module.exports = {
       return 0;
     };
 
+
     // Danh sách lệnh
     addCommandFields(
-      config.helpCommand.GeneralCategory,
+      config.HelpCommand.GeneralCategory,
       config.HelpCommand.GeneralCategory.Name,
       [
         { Name: 'help', Enabled: commands.General.Help.Enabled },
@@ -50,7 +50,7 @@ module.exports = {
       config.HelpCommand.TicketCategory,
       config.HelpCommand.TicketCategory.Name,
       [
-        { Name: 'add', Enabled: commands.Ticket.Ad.Enabled },
+        { Name: 'add', Enabled: commands.Ticket.Add.Enabled },
         { Name: 'remove', Enabled: commands.Ticket.Remove.Enabled },
         { Name: 'panel', Enabled: commands.Ticket.Panel.Enabled },
         { Name: 'rename', Enabled: commands.Ticket.Rename.Enabled },
@@ -80,8 +80,8 @@ module.exports = {
     if (config.HelpCommand.FooterTimestamp) {
       helpEmbed.setTimestamp();
     }
-    
-    const footerMsg = config.HelpCommand.footerMsg
+
+    const footerMsg = config.HelpCommand.FooterMsg
       .replace(/{guildName}/g, interaction.guild.name)
       .replace(/{userTag}/g, interaction.user.username);
 

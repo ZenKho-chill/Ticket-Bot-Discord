@@ -17,9 +17,9 @@ function createBlacklistedUsersEmbed(blacklistedUsers, currentPage, totalPages) 
   const embed = new Discord.EmbedBuilder();
 
   if (blacklistedUsers.length !== 0) {
-    embed.setTitle('Danh sách đen');
+    embed.setTitle('Người dùng bị đưa vào danh sách đen');
     embed.setColor(config.EmbedColors);
-    embed.setDescription('Danh sách đen');
+    embed.setDescription('Danh sách người dùng hiện đang bị đưa vào danh sách đen');
     embed.setFooter({ text: `Trang ${currentPage}/${totalPages}` });
 
     if (startIndex < blacklistedUsers.length) {
@@ -36,7 +36,7 @@ function createBlacklistedUsersEmbed(blacklistedUsers, currentPage, totalPages) 
     }
   } else {
     embed.setColor('Red');
-    embed.setDescription('Không có ai trong danh sách đen.');
+    embed.setDescription('Hiện tại không có người dùng nào bị đưa vào danh sách đen.');
     embed.setFooter({ text: `Trang ${currentPage}/${totalPages}` });
   }
 
@@ -47,7 +47,7 @@ module.exports = {
   enabled: commands.Utility.Blacklist.Enabled,
   data: new SlashCommandBuilder()
     .setName('blacklist')
-    .setDescription('Quản lý danh sách đen')
+    .setDescription('Quản lý danh sách đen người dùng')
     .addSubcommand((subcommand) =>
       subcommand
         .setName('add')
@@ -63,7 +63,7 @@ module.exports = {
     .addSubcommand((subcommand) =>
       subcommand
         .setName('list')
-        .setDescription('Thống kê danh sách đen')
+        .setDescription('Liệt kê tất cả người dùng hiện đang bị đưa vào danh sách đen')
     ),
   async execute(interaction, client) {
     try {
@@ -131,11 +131,11 @@ module.exports = {
         const paginationButtons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId('prevPage')
-                .setLabel('Trang trước')
+                .setLabel('Previous Page')
                 .setStyle('Primary'),
             new Discord.ButtonBuilder()
                 .setCustomId('nextPage')
-                .setLabel('Trang sau')
+                .setLabel('Next Page')
                 .setStyle('Primary'),
         );
     
@@ -173,21 +173,21 @@ module.exports = {
       
           for (let i = startIndex; i < endIndex && i < blacklistedUsers.length; i++) {
               const user = blacklistedUsers[i];
-              updatedEmbed.addFields({ name: 'User', value: `<@!${user.userId}>`, inline: false });
+              updatedEmbed.addFields({ name: 'Người dùng', value: `<@!${user.userId}>`, inline: false });
           }
       
           if (endIndex < blacklistedUsers.length) {
               updatedEmbed.addFields(
                   blacklistedUsers
                       .slice(endIndex, Math.min(endIndex + itemsPerPage, blacklistedUsers.length))
-                      .map(user => ({ name: 'User', value: `<@!${user.userId}>`, inline: false }))
+                      .map(user => ({ name: 'Người dùng', value: `<@!${user.userId}>`, inline: false }))
               );
           }
       
           try {
               await buttonInteraction.update({ embeds: [updatedEmbed], components: [paginationButtons] });
           } catch (updateError) {
-              console.error('Đã có lỗi khi cập nhật hành động của nút:', updateError);
+              console.error('Lỗi khi cập nhật tương tác nút:', updateError);
               collector.stop();
           }
       });
@@ -198,8 +198,8 @@ module.exports = {
     }
     }
 } catch (error) {
-    console.error('Lỗi khi quản lý danh sách đen:', error);
-    interaction.editReply({ content: "Lỗi khi quản lý danh sách đen. Thử lại.", ephemeral: true });
+    console.error('Lỗi khi quản lý người dùng bị đưa vào danh sách đen:', error);
+    interaction.editReply({ content: "Có lỗi khi quản lý người dùng bị đưa vào danh sách đen. Hãy thử lại.", ephemeral: true });
 }
 },
 };

@@ -1,14 +1,15 @@
-const { Discord, ActionRowBuilder, ButtonBuilder, EmbedBuilder, StringSelectMenuBuilder, Message, MessageAttachment, ModalBuilder, TextInputBuilder } = require('discord.js');
+const { Discord, ActionRowBuilder, ButtonBuilder, EmbedBuilder, StringSelectMenuBuilder, Message, MessageAttachment, ModalBuilder, TextInputBuilder } = require("discord.js");
 const fs = require('fs');
-const yaml = require('js-yaml')
+const yaml = require("js-yaml")
 const config = yaml.load(fs.readFileSync('./config.yml', 'utf8'))
-const utils = require('../utils.js');
-const guildModel = require('../models/guildModel.js');
-const ticketModel = require('../models/ticketModel.js');
-const reviewModel = require('../models/reviewsModel.js');
-const dashboardModel = require('../models/dashboardModel.js');
+const utils = require("../utils.js");
+const guildModel = require("../models/guildModel");
+const ticketModel = require("../models/ticketModel");
+const reviewsModel = require("../models/reviewsModel");
+const dashboardModel = require("../models/dashboardModel");
 
 module.exports = async (client, interaction) => {
+
   const statsDB = await guildModel.findOne({ guildID: config.GuildID });
   const ticketDB = await ticketModel.findOne({ channelID: interaction.channel.id });
   const dashboardDB = await dashboardModel.findOne({ guildID: config.GuildID });
@@ -18,33 +19,37 @@ module.exports = async (client, interaction) => {
 
     let ticketAuthor = await client.users.cache.get(ticketDB.userID)
     let closeUserID = await client.users.cache.get(ticketDB.closeUserID)
-    let closeReason = ticketDB.closeReason || 'Không có lý do';
+    let closeReason = ticketDB.closeReason || "Không có lý do.";
     let claimUser = await client.users.cache.get(ticketDB.claimUser)
     let totalMessages = ticketDB.messages
 
     const logEmbed = new EmbedBuilder()
     logEmbed.setColor("Red")
-    logEmbed.setTitle(config.Locale.ticketCloseTitle)
+    logEmbed.setTitle("📩 Ticket đã được đóng")
 
     if (closeUserID) logEmbed.addFields([
-      { name: `• ${config.Locale.logsClosedBy}`, value: `> <@!${closeUserID.id}>\n> ${closeUserID.username}` },
+      { name: `• Người đã đóng`, value: `> <@!${closeUserID.id}>\n> ${closeUserID.username}` },
     ])
 
     logEmbed.addFields([
-      { name: `• ${config.Locale.logsTicketAuthor}`, value: `> <@!${ticketAuthor.id}>\n> ${ticketAuthor.username}` },
+      { name: `• Người tạo`, value: `> <@!${ticketAuthor.id}>\n> ${ticketAuthor.username}` },
     ])
 
     if (config.TicketSettings.TicketCloseReason && closeReason) logEmbed.addFields([
-      { name: `• ${config.Locale.reason}`, value: `> ${closeReason}` },
+      { name: `• Lý do đóng`, value: `> ${closeReason}` },
     ])
 
     if (claimUser && config.ClaimingSystem.Enabled) logEmbed.addFields([
-      { name: `• ${config.Locale.logsTicket}`, value: `> #${interaction.channel.name}\n> ${ticketDB.ticketType}` },
+      { name: `• Tiếp nhận bởi`, value: `> <@!${claimUser.id}>\n> ${claimUser.username}` },
+    ])
+
+    logEmbed.addFields([
+      { name: `• Thông tin Ticket`, value: `> #${interaction.channel.name}\n> ${ticketDB.ticketType}` },
     ])
 
     logEmbed.setTimestamp()
     logEmbed.setThumbnail(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.webp?size=240`)
-    logEmbed.setFooter({ text: `${config.Locale.totalMessagesLog} ${totalMessages}`, iconURL: `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.webp?size=240` })
+    logEmbed.setFooter({ text: `Tổng số tin nhắn: ${totalMessages}`, iconURL: `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.webp?size=240` })
 
     let closeLogMsgID;
     let logsChannel;
@@ -56,18 +61,18 @@ module.exports = async (client, interaction) => {
     if (logsChannel && config.ticketClose.Enabled) {
       const embedOptions = { embeds: [logEmbed] };
 
-      const shouldIcludeAttachment = totalMessages >= config.TicketTranscriptSettings.MessageRequirement && !dashboardExists
+      const shouldIncludeAttachment = totalMessages >= config.TicketTranscriptSettings.MessagesRequirement && !dashboardExists
 
-      if (shouldIcludeAttachment) {
+      if (shouldIncludeAttachment) {
         embedOptions.files = [attachment];
       }
 
-      // Thêm nút "Xem bản ghi chép" nếu bảng điều khiển tồn tại
-      if (dashboardExists && totalMessages >= config.TicketTranscriptSettings.MessageRequirement && config.TicketTranscriptSettings.TranscriptType === "HTML" && config.TicketTranscriptSettings.SaveInFolder === true) {
+      // Nút "Xem Transcript" nếu có dashboard
+      if (dashboardExists && totalMessages >= config.TicketTranscriptSettings.MessagesRequirement && config.TicketTranscriptSettings.TranscriptType === "HTML" && config.TicketTranscriptSettings.SaveInFolder === true) {
         const viewTranscriptButton = new ButtonBuilder()
-          .setLabel(config.Locale.viewTranscriptButton)
+          .setLabel("📑 Xem lịch sử đoạn chat")
           .setStyle('Link')
-          .SetURL(`${dashboardDB.url}/transcript?channelId=${ticketDB.channelID}&dateNow=${timestamp}`);
+          .setURL(`${dashboardDB.url}/transcript?channelId=${ticketDB.channelID}&dateNow=${timestamp}`);
 
         const row = new ActionRowBuilder().addComponents(viewTranscriptButton);
 
@@ -82,14 +87,14 @@ module.exports = async (client, interaction) => {
     client.emit('sendUserDM', ticketDB, attachment, closeLogMsgID, timestamp);
 
     let dTime = config.TicketSettings.DeleteTime * 1000
-    let deleteTicketCountdown = config.Locale.deletingTicketMsg.replace(/{time}/g, `${config.TicketSettings.DeleteTime}`);
+    let deleteTicketCountdown = `🗑️ Ticket sẽ bị xóa sau **${config.TicketSettings.DeleteTime} giây**.`;
     const delEmbed = new EmbedBuilder()
       .setDescription(deleteTicketCountdown)
       .setColor("Red")
 
     const ticketDeleteButton = new ButtonBuilder()
       .setCustomId('closeTicket')
-      .setLabel(config.Locale.CloseTicketButton)
+      .setLabel("🎟️ Đóng Ticket")
       .setStyle(config.ButtonColors.closeTicket)
       .setEmoji(config.ButtonEmojis.closeTicket)
       .setDisabled(true)
@@ -115,10 +120,13 @@ module.exports = async (client, interaction) => {
       await interaction.channel.delete().catch(e => { })
     }, dTime)
 
-    let logMsg = `\n\n[${new Date().toLocaleString()}] [TICKET CLOSED] Ticket đã đóng thành công`;
+    let logMsg = `\n\n[${new Date().toLocaleString()}] [TICKET CLOSED] Một ticket đã được đóng thành công`;
     fs.appendFile("./logs.txt", logMsg, (e) => {
       if (e) console.log(e);
     });
+
   }
+
   CloseTicket()
+
 };

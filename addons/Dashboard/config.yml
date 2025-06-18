@@ -1,0 +1,46 @@
+DashboardLogs: true # Bật ghi nhật ký bảng điều khiển trên terminal? (đăng nhập người dùng, hành động, v.v.)
+
+# ===========================================================================
+# DISCORD OAUTH2
+# Bạn không được để trống các trường này!
+# ===========================================================================
+# Thông tin OAuth2 của Discord, lấy từ Developer Portal: https://discord.com/developers/applications
+# Lưu ý: PHẢI THAY THẾ LOCALHOST:3000 BẰNG DOMAIN HOẶC IP BẠN DÙNG ĐỂ TRUY CẬP BẢNG ĐIỀU KHIỂN WEB!
+clientID: ""
+clientSecret: ""
+callbackURL: "http://localhost:3000/auth/discord/callback" # Tạo Redirect URL trong Developer Portal và đặt thành callback URL này
+
+# ===========================================================================
+# WEB SERVER
+# Bạn không được để trống các trường này!
+# ===========================================================================
+URL: "http://localhost:3000" # URL chính xác bạn sẽ dùng để truy cập dashboard, ví dụ: https://zenkho.top (KHÔNG CÓ DẤU / CUỐI)
+Port: 3000 # Cổng chạy webserver
+
+secretKey: "uNLmk12acssGY31k8s0mj" # Có thể là bất cứ chuỗi gì, khuyến nghị dùng https://www.dashlane.com/features/password-generator với ít nhất 20 ký tự, ({{TIME}})
+Secure: false # Bật nếu bạn dùng HTTPS
+trustProxy: false # Bật nếu ứng dụng của bạn đứng sau reverse proxy (như Cloudflare, Nginx, v.v.)
+SessionExpires: "7d" # Thời gian phiên đăng nhập hợp lệ
+
+# HỆ THỐNG PHÂN QUYỀN GIẢI THÍCH:
+# --------------------------------------------------
+# Hệ thống phân quyền bảng điều khiển đã được nâng cấp!
+# Bạn không cần phải thêm thủ công vai trò cho quyền truy cập dashboard nữa.
+#
+# Cách hoạt động hiện tại:
+# 1. Người dùng có bất kỳ vai trò nào được liệt kê trong `SupportRoles` của
+#    bất kỳ danh mục vé nào trong file config.yml chính của bot vé sẽ tự động có quyền truy cập dashboard.
+#
+# 2. Người dùng CHỈ xem được vé từ các danh mục mà họ có ít nhất một vai trò hỗ trợ
+#    được đặt trong `SupportRoles` cho danh mục đó.
+#    Ví dụ:
+#    - Nếu một người dùng có vai trò hỗ trợ cho "Danh mục 1", họ chỉ thấy vé từ "Danh mục 1".
+#    - Nếu có vai trò hỗ trợ cho "Danh mục 1" và "Danh mục 3", họ sẽ thấy vé từ cả hai danh mục,
+#      nhưng không thấy vé từ các danh mục khác.
+#
+# Thay đổi này giúp quản lý quyền dễ dàng hơn và đảm bảo các nhân viên hỗ trợ
+# chỉ thấy vé họ chịu trách nhiệm.
+#
+# Bạn không cần cấu hình thêm gì nữa. Chỉ cần chắc chắn rằng các vai trò
+# đúng đã được đặt trong `SupportRoles` cho từng danh mục vé, bot sẽ tự động xử lý phần còn lại.
+# --------------------------------------------------

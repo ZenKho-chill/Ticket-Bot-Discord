@@ -26,7 +26,7 @@ const schema = new mongoose.Schema ({
     ticketCreationDate: Date,
     closedAt: Date,
     identifier: String,
-    closeReason: { type: String, default: "Không có lý do nào được cung cấp." },
+    closeReason: { type: String, default: "No reason provided." },
     closeNotificationTime: Number,
     closeNotificationMsgID: String,
     closeNotificationUserID: String,
