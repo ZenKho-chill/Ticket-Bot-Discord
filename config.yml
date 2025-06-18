@@ -205,7 +205,7 @@ TicketOpenEmbed:
 TicketButton1: # Bạn không thể vô hiệu hóa nút đầu tiên!
   TicketName: "Hỗ trợ kỹ thuật" # Tên nút và tên danh mục/ticket
   Description: "" # Mô tả danh mục (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không dùng
-  TicketCategoryID: "1384818829875613776" # ID của category chứa kênh ticket
+  TicketCategoryID: "" # ID của category chứa kênh ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Dùng {category} để hiển thị tên danh mục
   TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề của bạn và chờ phản hồi." # Dùng {user} cho tên người tạo ticket, {createdAt} cho thời gian tạo
   ButtonEmoji: "" # Để trống nếu không muốn dùng emoji
@@ -241,7 +241,7 @@ TicketButton2:
   Enabled: true # Bật danh mục thứ hai?
   TicketName: "Báo lỗi hệ thống" # Tên nút và danh mục/ticket
   Description: "" # Mô tả danh mục (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không cần
-  TicketCategoryID: "1384818829875613776" # ID của category chứa kênh ticket
+  TicketCategoryID: "" # ID của category chứa kênh ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Dùng {category} để hiện tên danh mục
   TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả sự cố bạn gặp phải và chờ phản hồi." # Có thể dùng {user}, {createdAt}
   ButtonEmoji: "" # Để trống nếu không muốn dùng emoji
@@ -263,7 +263,7 @@ TicketButton3:
   Enabled: true # Bật danh mục thứ ba?
   TicketName: "Yêu cầu khác" # Tên nút và danh mục/ticket
   Description: "" # Mô tả danh mục (chỉ dùng nếu bật SelectMenu), để trống nếu không dùng
-  TicketCategoryID: "1384818829875613776" # ID của Category chứa kênh ticket
+  TicketCategoryID: "" # ID của Category chứa kênh ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn mở ticket, có thể dùng {category}
   TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề của bạn và chờ phản hồi từ đội ngũ." # Có thể dùng {user}, {createdAt}
   ButtonEmoji: "" # Để trống nếu không muốn có emoji
@@ -286,7 +286,7 @@ TicketButton4:
   Enabled: true # Bật danh mục thứ tư?
   TicketName: "Báo lỗi/Khẩn cấp" # Tên nút và danh mục ticket
   Description: "" # Mô tả (chỉ hoạt động khi dùng SelectMenu), để trống nếu không dùng
-  TicketCategoryID: "1384818829875613776" # ID của Category chứa ticket
+  TicketCategoryID: "" # ID của Category chứa ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn khi mở ticket
   TicketMessage: "> Cảm ơn bạn đã liên hệ với bộ phận hỗ trợ.\n> Vui lòng mô tả chi tiết sự cố và chờ phản hồi từ đội ngũ." # Tin nhắn mở đầu ticket
   ButtonEmoji: "" # Để trống nếu không có emoji
@@ -309,7 +309,7 @@ TicketButton5:
   Enabled: true # Bật danh mục thứ năm?
   TicketName: "Yêu cầu đặc biệt" # Tên nút và tên danh mục ticket
   Description: "" # Mô tả (chỉ hoạt động nếu dùng SelectMenu), để trống nếu không dùng
-  TicketCategoryID: "1384818829875613776" # ID Category chứa ticket
+  TicketCategoryID: "" # ID Category chứa ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn trong ticket
   TicketMessage: "> Cảm ơn bạn đã liên hệ với đội ngũ hỗ trợ.\n> Vui lòng ghi rõ nội dung yêu cầu của bạn và chờ nhân viên phản hồi." # Tin nhắn mở đầu
   ButtonEmoji: "" # Để trống nếu không muốn emoji
@@ -336,7 +336,7 @@ TicketButton6:
   Enabled: false # Bật danh mục thứ 6?
   TicketName: "Khác" # Tên nút và danh mục ticket (có thể dùng cho vấn đề chưa xác định)
   Description: "Các yêu cầu không nằm trong danh mục cụ thể" # Chỉ hiển thị nếu bật SelectMenu
-  TicketCategoryID: "1384818829875613776" # ID của category chứa các ticket
+  TicketCategoryID: "" # ID của category chứa các ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề tin nhắn trong ticket
   TicketMessage: "> Cảm ơn bạn đã liên hệ hỗ trợ.\n> Vui lòng mô tả vấn đề bạn gặp phải và chờ nhân viên hỗ trợ phản hồi." # Tin nhắn mở đầu
   ButtonEmoji: "" # Để trống nếu không muốn thêm emoji
@@ -359,7 +359,7 @@ TicketButton7:
   Enabled: false # Bật danh mục thứ 7?
   TicketName: "Khác (2)" # Tên nút và danh mục ticket – bạn có thể đổi tên theo mục đích cụ thể
   Description: "Vấn đề chưa có trong các mục khác" # Hiển thị khi dùng SelectMenu
-  TicketCategoryID: "1384818829875613776" # ID của category chứa ticket
+  TicketCategoryID: "" # ID của category chứa ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề gửi vào ticket
   TicketMessage: "> Cảm ơn bạn đã liên hệ bộ phận hỗ trợ.\n> Vui lòng mô tả chi tiết vấn đề bạn gặp phải và chờ phản hồi từ nhân viên." # Tin nhắn mở đầu
   ButtonEmoji: "" # Để trống nếu không cần emoji
@@ -382,7 +382,7 @@ TicketButton8:
   Enabled: false # Bật danh mục thứ 8?
   TicketName: "Khác (3)" # Tên nút và danh mục ticket
   Description: "Nếu vấn đề của bạn không nằm trong các danh mục khác" # Hiển thị nếu dùng SelectMenu
-  TicketCategoryID: "1384818829875613776" # ID của category chứa ticket
+  TicketCategoryID: "" # ID của category chứa ticket
   TicketMessageTitle: "Ticket Hỗ Trợ ({category})" # Tiêu đề gửi vào ticket
   TicketMessage: "> Cảm ơn bạn đã liên hệ bộ phận hỗ trợ.\n> Vui lòng mô tả vấn đề và chờ phản hồi." # Tin nhắn mở đầu trong ticket
   ButtonEmoji: "" # Để trống nếu không cần emoji
