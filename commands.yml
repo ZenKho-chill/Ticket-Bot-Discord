@@ -1,0 +1,70 @@
+# ===========================================================================
+# CÁC LỆNH CHUNG
+# ===========================================================================
+
+General:
+  Help: # Lệnh trợ giúp
+    Enabled: true
+    Description: "Hiển thị danh sách tất cả các lệnh"
+  Ping: # Lệnh ping
+    Enabled: true
+    Description: "Kiểm tra độ trễ (ping) của bot"
+  Stats: # Lệnh thống kê
+    Enabled: true
+    Description: "Thống kê máy chủ"
+  Suggest: # Lệnh đề xuất
+    Enabled: true
+    Description: "Gửi một đề xuất"
+
+# ===========================================================================
+# CÁC LỆNH VỀ PHIẾU HỖ TRỢ (TICKET)
+# ===========================================================================
+
+Ticket:
+  Add: # Lệnh thêm người dùng
+    Enabled: true
+    Description: "Thêm người dùng vào phiếu hỗ trợ"
+    AllowEveryoneToUse: true # Nếu đặt thành false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+  Remove: # Lệnh xóa người dùng
+    Enabled: true
+    Description: "Xóa người dùng khỏi phiếu hỗ trợ"
+    AllowEveryoneToUse: true # Nếu đặt thành false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+  Close: # Lệnh đóng phiếu
+    Enabled: true
+    Description: "Đóng một phiếu hỗ trợ"
+  Delete: # Lệnh xóa phiếu
+    Enabled: true
+    Description: "Xóa ngay lập tức một phiếu hỗ trợ"
+  Panel: # Lệnh bảng điều khiển
+    Enabled: true
+    Description: "Gửi bảng điều khiển phiếu hỗ trợ"
+  Pin: # Lệnh ghim
+    Enabled: true
+    Description: "Ghim một phiếu hỗ trợ"
+  Rename: # Lệnh đổi tên
+    Enabled: true
+    Description: "Đổi tên phiếu hỗ trợ"
+  Alert: # Lệnh cảnh báo
+    Enabled: true
+    Description: "Gửi ping đến người tạo với thông báo rằng phiếu sẽ bị đóng nếu không có phản hồi"
+  Priority: # Lệnh độ ưu tiên
+    Enabled: true
+    Description: "Quản lý mức độ ưu tiên của phiếu hỗ trợ"
+
+# ===========================================================================
+# CÁC LỆNH TIỆN ÍCH
+# ===========================================================================
+
+Utility:
+  Blacklist: # Lệnh chặn người dùng
+    Enabled: true
+    Description: "Quản lý danh sách người dùng bị chặn"
+  Calculate: # Lệnh tính toán
+    Enabled: true
+    Description: "Máy tính toán học"
+  Crypto: # Lệnh thanh toán tiền ảo
+    Enabled: true
+    Description: "Gửi một khoản thanh toán bằng tiền điện tử"
+  Invoice: # Lệnh hóa đơn
+    Enabled: true
+    Description: "Gửi hóa đơn đến người dùng"
