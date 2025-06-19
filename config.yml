@@ -2,7 +2,7 @@
 # THÔNG TIN BOT
 # Không được để trống bất kỳ mục nào bên dưới!
 # ===========================================================================
-Token: "" # Token của bot - nếu bạn chưa biết cách lấy, xem hướng dẫn tại: https://docs.plexdevelopment.net
+Token: "" # Token của bot
 BotName: "ZenKho Ticket" # Tên hiển thị của bot trên Discord
 GuildID: "" # ID của server Discord bạn muốn bot hoạt động - chuột phải vào icon server > Sao chép ID
 EmbedColors: "#5e99ff" # Màu viền của các embed (dạng mã màu HEX)
@@ -94,7 +94,7 @@ TicketAlert: # Cấu hình hệ thống cảnh báo, nếu lệnh cảnh báo đ
 
 WorkingHours: # Cấu hình giờ làm việc
   Enabled: true # Bật giờ làm việc?
-  Timezone: "Asia/Ho_Chi_Minh" # Múi giờ của bạn, hãy dùng múi giờ từ danh sách: https://docs.plexdevelopment.net/frequently-asked-questions/valid-timezones
+  Timezone: "Asia/Ho_Chi_Minh" # Múi giờ của bạn
   Schedule: # Chỉ sử dụng định dạng 24 giờ!
     Monday: "07:00-16:00"
     Tuesday: "07:00-16:00"
