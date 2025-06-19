@@ -95,7 +95,7 @@ module.exports = {
       await newModel.save();
 
       if (config.SuggestionSettings.CreateThreads) await msg.startThread({
-        name: `${interaction.user.username}'s suggestion discussion'`,
+        name: `${interaction.user.username} góp ý'`,
         autoArchiveDuration: 10080,
         type: 'GUILD_PUBLIC_THREAD'
       });

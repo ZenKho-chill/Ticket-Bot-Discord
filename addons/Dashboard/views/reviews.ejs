@@ -256,7 +256,7 @@
                 <p class="review-message">
                   <% if (review.reviewMessage && review.reviewMessage.length > 45) { %>
                     <%= review.reviewMessage.substring(0, 45) %>... 
-                    <span class="read-more" onclick="openModal(<%= index %>)">Xem thêm</span>
+                    <span class="read-more" style="cursor: pointer;" onclick="openModal(<%= index %>)">Xem thêm</span>
                   <% } else { %>
                     <%= review.reviewMessage || 'Không có tin nhắn' %>
                   <% } %>

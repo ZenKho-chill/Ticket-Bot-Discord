@@ -131,11 +131,11 @@ module.exports = {
         const paginationButtons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId('prevPage')
-                .setLabel('Previous Page')
+                .setLabel('Trang trước')
                 .setStyle('Primary'),
             new Discord.ButtonBuilder()
                 .setCustomId('nextPage')
-                .setLabel('Next Page')
+                .setLabel('Trang tiếp theo')
                 .setStyle('Primary'),
         );
     

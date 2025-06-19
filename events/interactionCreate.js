@@ -90,7 +90,7 @@ module.exports = async (client, interaction) => {
     }
   }
 
-  // Reset select menu selection
+  // Đặt lại lựa chọn menu Chọn
   async function handleSelectMenuUpdate(interaction, menuCategory) {
     try {
       const buttonConfig = config[`TicketButton${menuCategory.slice(-1)}`];
@@ -188,13 +188,13 @@ module.exports = async (client, interaction) => {
         }
       }
 
-      // Replace placeholders in the locale string
+      // Thay thế trình giữ chỗ trong chuỗi địa phương
       let workingHoursEmbedLocale = config.WorkingHours.outsideWorkingHours;
       for (const [placeholder, value] of Object.entries(workingHoursPlaceholders)) {
         workingHoursEmbedLocale = workingHoursEmbedLocale.replace(new RegExp(placeholder, 'g'), value);
       }
 
-      // Replace current day placeholders
+      // Thay thế người giữ chỗ trong ngày hiện tại
       workingHoursEmbedLocale = workingHoursEmbedLocale
         .replace(/{startTime-currentDay}/g, workingHoursPlaceholders[`{startTime-${currentDay}}`])
         .replace(/{endTime-currentDay}/g, workingHoursPlaceholders[`{endTime-${currentDay}}`]);
@@ -235,7 +235,7 @@ module.exports = async (client, interaction) => {
       if (e) console.log(e);
     });
 
-    // Check for required roles
+    // Kiểm tra các vai trò cần thiết
     if (buttonConfig.RequiredRoles && buttonConfig.RequiredRoles?.length > 0) {
       let reqRole = false
       let ticketRoleNotAllowed = new EmbedBuilder()
@@ -261,7 +261,7 @@ module.exports = async (client, interaction) => {
       if (reqRole === false) return interaction.editReply({ embeds: [ticketRoleNotAllowed], ephemeral: true })
     }
 
-    // Check for blacklisted roles
+    // Kiểm tra các vai trò trong danh sách đen
     let userBlacklisted = new EmbedBuilder()
       .setTitle(config.Locale.userBlacklistedTitle)
       .setColor("Red")
@@ -273,7 +273,7 @@ module.exports = async (client, interaction) => {
       .setTimestamp();
 
 
-    // check if user is blacklisted from creating tickets
+    // Kiểm tra xem người dùng có bị danh sách đen không phải là tạo vé không
     const blacklistedUser = await blacklistModel.findOne({ userId: interaction.user.id });
     if (blacklistedUser && blacklistedUser.blacklisted) {
       if (!buttonConfig.Questions || (buttonConfig.Questions && buttonConfig.Questions.length < 0)) {
@@ -721,7 +721,7 @@ module.exports = async (client, interaction) => {
         });
       }
 
-      // Parallel validation checks
+      // Kiểm tra xác thực song song
       const [blacklistResult, workingHoursResult] = await Promise.all([
         blacklistModel.findOne({ userId: interaction.user.id }),
         validateWorkingHours(interaction)
@@ -730,7 +730,7 @@ module.exports = async (client, interaction) => {
         return [null, null];
       });
 
-      // Blacklist check
+      // Kiểm tra danh sách đen
       if (blacklistResult?.blacklisted) {
         return interaction.editReply({
           embeds: [userBlacklisted],
@@ -738,7 +738,7 @@ module.exports = async (client, interaction) => {
         });
       }
 
-      // Working hours check
+      //Kiểm tra giờ làm việc
       if (workingHoursResult?.outsideHours) {
         return interaction.editReply({
           embeds: [workingHoursResult.embed],
@@ -814,7 +814,7 @@ module.exports = async (client, interaction) => {
   }
 
 
-  // send question answers to the ticket
+  // Gửi câu trả lời câu hỏi cho vé
   if (interaction.type === InteractionType.ModalSubmit && interaction.customId.startsWith('questionModal')) {
     const [, buttonConfigKey, timestamp] = interaction.customId.split('-');
     const buttonConfig = config[`TicketButton${buttonConfigKey}`];

@@ -9,10 +9,10 @@ General:
     Enabled: false
     Description: "Kiểm tra độ trễ (ping) của bot"
   Stats: # Lệnh thống kê
-    Enabled: true
+    Enabled: false
     Description: "Thống kê máy chủ"
   Suggest: # Lệnh gửi đề xuất
-    Enabled: true
+    Enabled: false
     Description: "Gửi một đề xuất"
 
 # ===========================================================================
@@ -22,11 +22,11 @@ Ticket:
   Add: # Lệnh thêm người dùng vào ticket
     Enabled: true
     Description: "Thêm người dùng vào ticket"
-    AllowEveryoneToUse: true # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+    AllowEveryoneToUse: false # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
   Remove: # Lệnh xoá người dùng khỏi ticket
     Enabled: true
     Description: "Xoá người dùng khỏi ticket"
-    AllowEveryoneToUse: true # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
+    AllowEveryoneToUse: false # Nếu đặt là false, chỉ những người có vai trò hỗ trợ mới có thể sử dụng lệnh này
   Close: # Lệnh đóng ticket
     Enabled: true
     Description: "Đóng một ticket"

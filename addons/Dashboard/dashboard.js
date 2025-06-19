@@ -455,7 +455,7 @@ app.get('/tickets', isLoggedIn, async (req, res) => {
     })
     .map(([key, category]) => category.TicketName);
 
-    // Pagination
+    // Phân trang
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const skip = (page - 1) * limit;

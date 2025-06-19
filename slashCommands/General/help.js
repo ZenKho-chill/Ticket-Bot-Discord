@@ -66,9 +66,6 @@ module.exports = {
       config.HelpCommand.UtilityCategory,
       config.HelpCommand.UtilityCategory.Name,
       [
-        { Name: 'invoice', Enabled: commands.Utility.Invoice.Enabled },
-        { Name: 'crypto', Enabled: commands.Utility.Crypto.Enabled },
-        { Name: 'calculate', Enabled: commands.Utility.Calculate.Enabled },
         { Name: 'blacklist', Enabled: commands.Utility.Blacklist.Enabled }
       ]
     );

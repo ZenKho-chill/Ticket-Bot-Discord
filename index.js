@@ -3,23 +3,23 @@ if (process.platform !== "win32") require("child_process").exec("npm install");
 
 const color = require('ansi-colors');
 const axios = require('axios');
-console.log(`${color.yellow(`Starting bot, this can take a while..`)}`);
+console.log(`${color.yellow(`Bắt đầu bot, điều này có thể mất một lúc ..`)}`);
 const fs = require('fs');
 
 const version = Number(process.version.split('.')[0].replace('v', ''));
 if (version < 18) {
-  console.log(`${color.red(`[ERROR] Plex Tickets requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
+  console.log(`${color.red(`[ERROR] ZenKho Ticket Yêu cầu phiên bản NodeJS từ 18 trở lên!\nBạn có thể kiểm tra NodeJS của mình bằng cách chạy lệnh "Node -v" trong terminal của bạn.`)}`);
 
-  console.log(`${color.blue(`\n[INFO] To update Node.js, follow the instructions below for your operating system:`)}`);
-  console.log(`${color.green(`- Windows:`)} Download and run the installer from ${color.cyan(`https://nodejs.org/`)}`);
-  console.log(`${color.green(`- Ubuntu/Debian:`)} Run the following commands in the Terminal:`);
+  console.log(`${color.blue(`\n[INFO] Để cập nhật Node.js, hãy làm theo các hướng dẫn bên dưới cho hệ điều hành của bạn:`)}`);
+  console.log(`${color.green(`- Windows:`)} Tải xuống và chạy trình cài đặt từ ${color.cyan(`https://nodejs.org/`)}`);
+  console.log(`${color.green(`- Ubuntu/Debian:`)} Chạy các lệnh sau trong Terminal:`);
   console.log(`${color.cyan(`  - sudo apt update`)}`);
   console.log(`${color.cyan(`  - sudo apt upgrade nodejs`)}`);
-  console.log(`${color.green(`- CentOS:`)} Run the following commands in the Terminal:`);
+  console.log(`${color.green(`- CentOS:`)} Chạy các lệnh sau trong Terminal:`);
   console.log(`${color.cyan(`  - sudo yum update`)}`);
   console.log(`${color.cyan(`  - sudo yum install -y nodejs`)}`);
 
-  let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] Plex Tickets requires a NodeJS version of 18 or higher!`;
+  let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] ZenKho Ticket Yêu cầu phiên bản NodeJS từ 18 trở lên!`;
   fs.appendFile("./logs.txt", logMsg, (e) => { 
     if(e) console.log(e);
   });
@@ -28,7 +28,7 @@ if (version < 18) {
 }
 
 const packageFile = require('./package.json');
-let logMsg = `\n\n[${new Date().toLocaleString()}] [STARTING] Attempting to start the bot..\nNodeJS Version: ${process.version}\nBot Version: ${packageFile.version}`;
+let logMsg = `\n\n[${new Date().toLocaleString()}] [STARTING] Cố gắng bắt đầu bot ..\nNodeJS Phiên bản: ${process.version}\nPhiên bản bot: ${packageFile.version}`;
 fs.appendFile("./logs.txt", logMsg, (e) => { 
   if(e) console.log(e);
 });
@@ -50,7 +50,7 @@ const client = new Client({
   ],
   presence: {
     status: 'dnd',
-    activities: [{ name: 'Starting up...', type: ActivityType.Playing }]
+    activities: [{ name: 'Bắt đầu ...', type: ActivityType.Playing }]
   },
   retryLimit: 3
 });
@@ -60,19 +60,19 @@ try {
   config = yaml.load(fs.readFileSync('./config.yml', 'utf8'))
   } catch (e) {
     if (e instanceof yaml.YAMLException) {
-      console.error(color.red('An error was found in your config.yml file'), e.message);
+      console.error(color.red('Một lỗi đã được tìm thấy trong tệp config.yml của bạn'), e.message);
       console.error(``);
-      console.error(color.yellow(`Error position: Line ${e.mark.line + 1}, Column ${e.mark.column + 1}`));
+      console.error(color.yellow(`Vị trí lỗi: dòng ${e.mark.line + 1}, Cột ${e.mark.column + 1}`));
       console.error(``);
 
-      console.error(color.red('IMPORTANT INFORMATION:'));
-      console.error(color.yellow('YAML files are strict about how text is spaced and positioned.'));
-      console.error(color.yellow('Make sure every line is correctly lined up.'));
-      console.error(color.yellow('Use spaces for indentation and keep them consistent.'));
-      console.error(color.yellow('Check that each section starts with the right number of spaces.'));
-      console.error(color.yellow('The message above should display the part that is not formatted properly, and the location.'));
+      console.error(color.red('Thông tin quan trọng:'));
+      console.error(color.yellow('Các tập tin YAML nghiêm ngặt về cách văn bản được đặt và định vị.'));
+      console.error(color.yellow('Hãy chắc chắn rằng mọi dòng được xếp hàng chính xác.'));
+      console.error(color.yellow('Sử dụng không gian để thụt lề và giữ chúng nhất quán.'));
+      console.error(color.yellow('Kiểm tra xem mỗi phần bắt đầu với số lượng không gian phù hợp.'));
+      console.error(color.yellow('Thông báo trên sẽ hiển thị phần không được định dạng đúng và vị trí.'));
     } else {
-      console.error(color.red('Error reading configuration file:'), e.message);
+      console.error(color.red('Lỗi khi đọc tệp cấu hình:'), e.message);
     }
     process.exit(1); 
   }
@@ -95,10 +95,10 @@ async function uploadToHaste(textToUpload) {
     return response.data.key;
   } catch (error) {
     if (error.response) {
-      console.error('Error uploading to Haste-server. Status:', error.response.status);
-      console.error('Response data:', error.response.data);
+      console.error('Lỗi tải lên để Haste-Server.Trạng thái:', error.response.status);
+      console.error('Dữ liệu phản hồi:', error.response.data);
     } else {
-      console.error('Error uploading to Haste-server:', error.message);
+      console.error('Tải lên Lỗi lên Haste-Server:', error.message);
     }
     return null;
   }
@@ -118,7 +118,7 @@ async function handleAndUploadError(errorType, error) {
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
-      console.error('Error reading file:', err.message);
+      console.error('Lỗi khi đọc tệp:', err.message);
       return;
     }
 
@@ -128,9 +128,9 @@ async function handleAndUploadError(errorType, error) {
     uploadToHaste(truncatedContent).then(key => {
       if (key) {
         const hasteURL = `https://paste.plexdevelopment.net/${key}`;
-        console.log(`${color.green.bold(`[v${packageFile.version}]`)} ${color.red(`If you require assistance, create a ticket in our Discord server and share this link:`)} ${color.yellow(hasteURL)}\n\n`);
+        console.log(`${color.green.bold(`[v${packageFile.version}]`)} ${color.red(`Nếu bạn yêu cầu hỗ trợ, hãy tạo vé trong máy chủ Discord của chúng tôi và chia sẻ liên kết này:`)} ${color.yellow(hasteURL)}\n\n`);
       } else {
-        console.log('Paste Upload failed.');
+        console.log('Tải lên không thành công.');
       }
     });
   });
